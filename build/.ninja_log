@@ -1,0 +1,8 @@
+# ninja log v5
+5	25	1679427888336055458	engine/CMakeFiles/ElgineEngine.dir/utils/time.cpp.o	74e4bef7e35f1ca2
+4	204	1679427888514269034	engine/CMakeFiles/ElgineEngine.dir/utils/debug.cpp.o	28f5e720a7a25a11
+4	287	1679431724352894219	engine/CMakeFiles/ElgineEngine.dir/elgine.cpp.o	823a0a2736bf0fcf
+287	307	1679431724375080000	engine/libElgineEngine.a	7d149156c4de5577
+4	191	1679431724256804602	CMakeFiles/Elgine.dir/main.cpp.o	257d323a47bc9e7c
+307	335	1679431724402909291	Elgine	8c994335ef5af5bf
+5	24	1679346269059106518	engine/CMakeFiles/ElgineEngine.dir/ecs/ecs.cpp.o	1d68ff2f30b18886
