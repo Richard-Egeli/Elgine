@@ -2,26 +2,19 @@
 #define ENGINE_ECS_COMPONENT_HPP_
 
 #include <bitset>
-#include <cstddef>
 
-const size_t MAX_COMPONENTS = 32;
-typedef std::bitset<MAX_COMPONENTS> ComponentMask;
+using ComponentId = unsigned long long int;
+
+static ComponentId componentIdCounter;
 
 struct Component {
-    int id;
+    ComponentId id;
 
- public:
-    template <class T>
-    static int GetId();
-
-    Component() { this->id = GetId<Component>(); }
+    template <typename T>
+    static ComponentId GetId() {
+        static ComponentId id = componentIdCounter++;
+        return id;
+    }
 };
-
-static int componentCounter;
-template <class T>
-int Component::GetId() {
-    static int componentId = componentCounter++;
-    return componentId;
-}
 
 #endif  // ENGINE_ECS_COMPONENT_HPP_

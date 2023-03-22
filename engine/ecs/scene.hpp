@@ -1,113 +1,61 @@
 #ifndef ENGINE_ECS_SCENE_HPP_
 #define ENGINE_ECS_SCENE_HPP_
 
-#include <bitset>
 #include <iostream>
 #include <vector>
 
-#include "component-pool.hpp"
 #include "component.hpp"
+#include "entity.hpp"
+#include "pool.hpp"
 
-struct Scene;
-
-typedef unsigned int EntityIndex;
-typedef unsigned int EntityVersion;
-typedef unsigned long long EntityId;
-
-typedef void (*System)(Scene& scene);
-
-inline EntityId CreateEntityId(EntityIndex index, EntityVersion version) {
-    return ((EntityId)index << 32) | ((EntityId)version);
-}
-
-inline EntityIndex GetEntityIndex(EntityId id) { return id >> 32; }
-
-inline EntityVersion GetEntityVersion(EntityId id) { return (EntityVersion)id; }
-
-inline bool IsEntityValid(EntityId id) { return (id >> 32) != EntityIndex(-1); }
-
-#define INVALID_ENTITY CreateEntityId(CreateIndex(-1), 0);
+static std::vector<Entity> entities;
+static std::vector<Pool*> components;
 
 struct Scene {
-    struct EntityDesc {
-        EntityId id;
-        ComponentMask mask;
-    };
+    static std::vector<Entity>& GetEntities() { return entities; }
 
-    std::vector<EntityDesc> entities;
-    std::vector<System> systems;
-    std::vector<ComponentPool*> componentPools;
-    std::vector<EntityIndex> freeEntities;
-
-    EntityId CreateEntity() {
-        if (!freeEntities.empty()) {
-            EntityIndex newIndex = freeEntities.back();
-            freeEntities.pop_back();
-            EntityId newId = CreateEntityId(newIndex, GetEntityVersion(entities[newIndex].id));
-            entities[newIndex].id = newId;
-            return entities[newIndex].id;
+    static Entity* CreateEntity() {
+        for (int i = 0; i < entities.size(); i++) {
+            if (entities[i].destroyed) {
+                Entity entity;
+                entity.id   = i;
+                entities[i] = entity;
+                return &entities[i];
+            }
         }
 
-        entities.push_back({entities.size(), ComponentMask()});
-        return entities.back().id;
-    };
+        Entity entity;
+        entity.id = entities.size();
+        entities.push_back(entity);
 
-    void DestroyEntity(EntityId id) {
-        EntityId newId                  = CreateEntityId(EntityIndex(-1), GetEntityVersion(id) + 1);
-        entities[GetEntityIndex(id)].id = newId;
-        entities[GetEntityIndex(id)].mask.reset();
-        freeEntities.push_back(GetEntityIndex(id));
+        return &entities.back();
     }
 
-    void AddSystem(System& system) {
-        for (int i = 0; i < systems.size(); i++) {
-            if (&systems[i] == &system)
-                return;
-        }
-
-        systems.push_back(system);
-    }
-
-    void RunSystem() {
-        for (auto sys : systems) sys(*this);
+    static void DestroyEntity(Entity& entity) {
+        entities[entity.id].destroyed = true;
+        entity.destroyed              = true;
     }
 
     template <typename T>
-    void RemoveComponent(EntityId id) {
-        if (entities[GetEntityIndex(id)].id != id)
-            return;
+    static T* AddComponent(Entity* entity) {
+        ComponentId id = Component::GetId<T>();
 
-        int componentId = Component::GetId<T>();
-        entities[GetEntityIndex(id)].mask.reset(componentId);
+        if (id >= components.size()) {
+            components.push_back(new Pool(sizeof(T)));
+        }
+
+        T* component = new (components[id]->Get(entity->id)) T();
+        entities[entity->id].mask.set(id);
+
+        return component;
     }
 
     template <typename T>
-    T* AddComponent(EntityId id) {
-        int componentId = Component::GetId<T>();
+    static void RemoveComponent(Entity& entity) {
+        ComponentId componentId = Component::GetId<T>();
 
-        if (componentPools.size() <= componentId) {
-            componentPools.resize(componentId + 1, nullptr);
-        }
-
-        if (componentPools[componentId] == nullptr) {
-            componentPools[componentId] = new ComponentPool(sizeof(T));
-        }
-
-        T* pComponent = new (componentPools[componentId]->get(id)) T();
-        entities[id].mask.set(componentId);
-        return nullptr;
-    }
-
-    template <typename T>
-    T* GetComponent(EntityId id) {
-        int componentId = Component::GetId<T>();
-
-        if (entities[id].mask.test(componentId))
-            return nullptr;
-
-        T* comp = static_cast<T*>(componentPools[componentId]->get(id));
-        return comp;
+        entities[entity.id].mask.reset(componentId);
     }
 };
 
-#endif  // ENGINE_ECS_ENTITY_HPP_
+#endif  // ENGINE_ECS_SCENE_HPP_

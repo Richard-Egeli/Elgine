@@ -1,36 +1,19 @@
 #ifndef ENGINE_ECS_ENTITY_HPP_
 #define ENGINE_ECS_ENTITY_HPP_
 
-#include <iostream>
+#include <bitset>
 
-#include "component.hpp"
-#include "elgine.hpp"
-#include "scene.hpp"
+const int MAX_COMPONENTS = 64;
+using EntityId           = unsigned long long int;
+using EntityIndex        = unsigned int;
+using EntityVersion      = unsigned int;
+using EntityDestroy      = bool;
+using ComponentMask      = std::bitset<MAX_COMPONENTS>;
 
 struct Entity {
- public:
     EntityId id;
-
-    Entity() { this->id = Elgine::Scene.CreateEntity(); }
-
-    virtual void Setup() = 0;
-
-    template <typename T>
-    void AddComponent() {
-        Elgine::Scene.AddComponent<T>(this->id);
-    };
-
-    void AddSystem(System& system) { Elgine::Scene.AddSystem(system); }
-
-    template <typename T>
-    void RemoveComponent() {
-        Elgine::Scene.RemoveComponent<T>(this->id);
-    }
-
-    template <typename T>
-    void GetComponent() {
-        Elgine::Scene.GetComponent<T>(this->id);
-    }
+    ComponentMask mask;
+    EntityDestroy destroyed;
 };
 
 #endif  // ENGINE_ECS_ENTITY_HPP_

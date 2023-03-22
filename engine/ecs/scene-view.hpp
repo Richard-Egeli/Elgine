@@ -1,72 +1,81 @@
 #ifndef ENGINE_ECS_SCENE_VIEW_HPP_
 #define ENGINE_ECS_SCENE_VIEW_HPP_
 
+#include <iostream>
+
+#include "entity.hpp"
 #include "scene.hpp"
 
 template <typename... ComponentTypes>
 struct SceneView {
-    SceneView(Scene& scene) : scene(&scene) {
+    SceneView() {
         if (sizeof...(ComponentTypes) == 0) {
             all = true;
         } else {
             // Unpack the template parameters into an initializer list
-            int componentIds[] = {0, Component::GetId<ComponentTypes>()...};
-            for (int i = 1; i < (sizeof...(ComponentTypes) + 1); i++)
+            ComponentId componentIds[] = {0, Component::GetId<ComponentTypes>()...};
+
+            for (int i = 1; i < (sizeof...(ComponentTypes) + 1); i++) {
                 componentMask.set(componentIds[i]);
+            }
         }
     }
 
     struct Iterator {
-        Iterator(Scene* scene, EntityIndex index, ComponentMask mask, bool all)
-            : scene(scene), index(index), mask(mask), all(all) {}
+        Iterator(EntityIndex index, ComponentMask mask, bool all)
+            : index(index), mask(mask), all(all) {}
 
-        EntityId operator*() const { return scene->entities[index].id; }
+        Entity* operator*() const { return &Scene::GetEntities()[index]; }
 
         bool operator==(const Iterator& other) const {
-            return index == other.index || index == scene->entities.size();
+            return index == other.index || index == Scene::GetEntities().size();
         }
 
         bool operator!=(const Iterator& other) const {
-            return index != other.index && index != scene->entities.size();
+            return index != other.index && index != Scene::GetEntities().size();
         }
 
         bool ValidIndex() {
             return
-                // It's a valid entity ID
-                IsEntityValid(scene->entities[index].id) &&
                 // It has the correct component mask
-                (all || mask == (mask & scene->entities[index].mask));
+                (all || mask == (mask & Scene::GetEntities()[index].mask));
         }
 
         Iterator& operator++() {
             // Move the iterator forward
             do {
                 index++;
-            } while (index < scene->entities.size() && !ValidIndex());
+            } while (index < Scene::GetEntities().size() && !ValidIndex() &&
+                     Scene::GetEntities()[index].destroyed);
             return *this;
         }
 
         EntityIndex index;
-        Scene* scene;
         ComponentMask mask;
         bool all{false};
     };
 
     const Iterator begin() const {
         int firstIndex = 0;
-        while (firstIndex < scene->entities.size() &&
-               (componentMask != (componentMask & scene->entities[firstIndex].mask) ||
-                !IsEntityValid(scene->entities[firstIndex].id))) {
+        size_t size    = Scene::GetEntities().size();
+
+        while (firstIndex < size) {
+            ComponentMask mask = componentMask & Scene::GetEntities()[firstIndex].mask;
+            bool destroyed     = Scene::GetEntities()[firstIndex].destroyed;
+            if (mask == componentMask && !destroyed) {
+                break;
+            }
+
             firstIndex++;
         }
-        return Iterator(scene, firstIndex, componentMask, all);
+
+        return Iterator(firstIndex, componentMask, all);
     }
 
     const Iterator end() const {
-        return Iterator(scene, EntityIndex(scene->entities.size()), componentMask, all);
+        return Iterator(EntityIndex(Scene::GetEntities().size()), componentMask, all);
     }
 
-    Scene* scene{nullptr};
     ComponentMask componentMask;
     bool all{false};
 };

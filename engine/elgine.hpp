@@ -3,14 +3,16 @@
 
 #include "component.hpp"
 #include "debug.hpp"
-#include "quaternion.hpp"
 #include "time.hpp"
-#include "transform.hpp"
-#include "vector3.hpp"
 
 class SDL_Window;
 class SDL_Renderer;
 struct Scene;
+
+typedef void (*OnStart)(void);
+typedef void (*OnUpdate)(void);
+typedef void (*OnFixedUpdate)(void);
+typedef void (*OnRender)(void);
 
 class Elgine {
  public:
@@ -22,6 +24,11 @@ class Elgine {
     SDL_Window* window;
     SDL_Renderer* renderer;
     static Scene Scene;
+
+    static OnStart Start;
+    static OnUpdate Update;
+    static OnFixedUpdate FixedUpdate;
+    static OnRender Render;
 
  private:
     bool isRunning;
