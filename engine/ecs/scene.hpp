@@ -8,12 +8,15 @@
 #include "component-pool.hpp"
 #include "component.hpp"
 
+struct Scene;
+
 typedef unsigned int EntityIndex;
 typedef unsigned int EntityVersion;
 typedef unsigned long long EntityId;
 
+typedef void (*System)(Scene& scene);
+
 inline EntityId CreateEntityId(EntityIndex index, EntityVersion version) {
-    std::cout << "HERE " << index << "\n";
     return ((EntityId)index << 32) | ((EntityId)version);
 }
 
@@ -26,14 +29,13 @@ inline bool IsEntityValid(EntityId id) { return (id >> 32) != EntityIndex(-1); }
 #define INVALID_ENTITY CreateEntityId(CreateIndex(-1), 0);
 
 struct Scene {
-    static Scene Current;
-
     struct EntityDesc {
         EntityId id;
         ComponentMask mask;
     };
 
     std::vector<EntityDesc> entities;
+    std::vector<System> systems;
     std::vector<ComponentPool*> componentPools;
     std::vector<EntityIndex> freeEntities;
 
@@ -50,6 +52,26 @@ struct Scene {
         return entities.back().id;
     };
 
+    void DestroyEntity(EntityId id) {
+        EntityId newId                  = CreateEntityId(EntityIndex(-1), GetEntityVersion(id) + 1);
+        entities[GetEntityIndex(id)].id = newId;
+        entities[GetEntityIndex(id)].mask.reset();
+        freeEntities.push_back(GetEntityIndex(id));
+    }
+
+    void AddSystem(System& system) {
+        for (int i = 0; i < systems.size(); i++) {
+            if (&systems[i] == &system)
+                return;
+        }
+
+        systems.push_back(system);
+    }
+
+    void RunSystem() {
+        for (auto sys : systems) sys(*this);
+    }
+
     template <typename T>
     void RemoveComponent(EntityId id) {
         if (entities[GetEntityIndex(id)].id != id)
@@ -57,13 +79,6 @@ struct Scene {
 
         int componentId = Component::GetId<T>();
         entities[GetEntityIndex(id)].mask.reset(componentId);
-    }
-
-    void DestroyEntity(EntityId id) {
-        EntityId newId                  = CreateEntityId(EntityIndex(-1), GetEntityVersion(id) + 1);
-        entities[GetEntityIndex(id)].id = newId;
-        entities[GetEntityIndex(id)].mask.reset();
-        freeEntities.push_back(GetEntityIndex(id));
     }
 
     template <typename T>

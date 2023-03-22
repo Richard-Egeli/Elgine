@@ -3,12 +3,10 @@
 
 #include "component.hpp"
 
-struct Vector3 : public Component {
+struct Vector3 {
     float x;
     float y;
     float z;
-
-    Vector3() { this->id = GetId<Vector3>(); }
 };
 
 #endif  // ENGINE_ECS_COMPONENTS_VECTOR3_HPP_

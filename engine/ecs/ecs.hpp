@@ -3,6 +3,8 @@
 
 #include "component-pool.hpp"
 #include "component.hpp"
+#include "components.hpp"
+#include "entity.hpp"
 #include "scene-view.hpp"
 #include "scene.hpp"
 

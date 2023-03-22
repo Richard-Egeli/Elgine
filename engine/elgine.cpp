@@ -12,11 +12,8 @@
 
 Scene Elgine::Scene;
 
-Elgine::Elgine() { isRunning = true; }
-
-Elgine::~Elgine() {}
-
-void Elgine::Init() {
+Elgine::Elgine() {
+    isRunning = true;
     CHECK_TRUE(SDL_Init(SDL_INIT_EVERYTHING) == 0);
     CHECK_NULL(window = SDL_CreateWindow("Elgine",
                                          SDL_WINDOWPOS_CENTERED,
@@ -26,19 +23,10 @@ void Elgine::Init() {
                                          0));
 
     CHECK_NULL(renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED));
-
-    EntityId ent1 = Scene.CreateEntity();
-    Scene.AddComponent<Transform>(ent1);
-
-    EntityId ent2 = Scene.CreateEntity();
-
-    std::cout << "ID1 = " << ent1 << " - ID2 = " << ent2 << "\n";
-    Scene.AddComponent<Transform>(ent2);
-
-    for (EntityId ent : SceneView<Transform>(Scene)) {
-        std::cout << "TRIGGERED" << std::endl;
-    }
+    Debug::Log("Elgine Initialized!");
 }
+
+Elgine::~Elgine() {}
 
 void Elgine::Input() {
     SDL_Event event;
@@ -70,6 +58,8 @@ void Elgine::GameLoop() {
     while (isRunning) {
         Input();
 
+        Scene.RunSystem();
+
         double newTime   = SDL_GetTicks64();
         double frameTime = newTime - currentTime;
         if (frameTime > 0.25)
@@ -84,6 +74,10 @@ void Elgine::GameLoop() {
 
             Time::time      = t;
             Time::deltaTime = dt;
+
+            for (auto entity : SceneView<Transform>(Scene)) {
+                std::cout << entity << " TICK\n";
+            }
         }
 
         SDL_RenderClear(renderer);
@@ -95,11 +89,6 @@ void Elgine::GameLoop() {
 }
 
 void Elgine::Run() {
-    Init();
-    Debug::Log("Elgine Initialized!");
-
-    isRunning = true;
-
     Debug::Log("Elgine Game Loop Starting!");
     GameLoop();
 
