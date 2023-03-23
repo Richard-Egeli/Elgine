@@ -1,9 +1,11 @@
 #ifndef GAME_COMPONENTS_PLAYER_HPP_
 #define GAME_COMPONENTS_PLAYER_HPP_
 
-class Player {
+#include "entity.hpp"
+
+struct Player : public Entity {
  public:
-    void Setup();
+    virtual void Setup(Scene& scene);
 };
 
 #endif  // GAME_COMPONENTS_PLAYER_HPP_

@@ -1,19 +1,22 @@
-#ifndef ENGINE_ECS_ENTITY_HPP_
-#define ENGINE_ECS_ENTITY_HPP_
+#ifndef ENGINE_ECS_BASE_HPP_
+#define ENGINE_ECS_BASE_HPP_
 
-#include <bitset>
+#include <type_traits>
 
-const int MAX_COMPONENTS = 64;
-using EntityId           = unsigned long long int;
-using EntityIndex        = unsigned int;
-using EntityVersion      = unsigned int;
-using EntityDestroy      = bool;
-using ComponentMask      = std::bitset<MAX_COMPONENTS>;
+#include "scene.hpp"
+struct Entity : public Base {
+    template <typename T>
+    static T Create(Scene& scene) {
+        static_assert(std::is_base_of<Entity, T>::value, "Type is not base of Entity");
 
-struct Entity {
-    EntityId id;
-    ComponentMask mask;
-    EntityDestroy destroyed;
+        T ent;
+        scene.AddEntity(ent);
+        ent.Setup(scene);
+
+        return ent;
+    }
+
+    virtual void Setup(Scene& scene) = 0;
 };
 
-#endif  // ENGINE_ECS_ENTITY_HPP_
+#endif  // ENGINE_ECS_BASE_HPP_

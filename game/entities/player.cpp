@@ -2,4 +2,8 @@
 
 #include <iostream>
 
-void Player::Setup(void) {}
+static void Test(Scene& scene) { std::cout << "System works!\n"; }
+
+void Player::Setup(Scene& scene) {
+    //;
+}

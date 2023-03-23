@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "ecs.hpp"
 #include "elgine.hpp"
+#include "player.hpp"
 #include "time.hpp"
 
 struct Transform {
@@ -18,40 +18,17 @@ struct Damage {
     float damage;
 };
 
+struct UpdateComponent {};
+
 void GameManager::Init() {
-    Entity player = Scene::CreateEntity();
-    Scene::AddComponent<Transform>(player);
-    Scene::AddComponent<Health>(player);
-    Scene::AddComponent<Damage>(player);
+    Scene& scene  = Elgine::CreateScene();
+    Player player = Entity::Create<Player>(scene);
 
-    Entity ai = Scene::CreateEntity();
-    // Scene::AddComponent<Health>(ai);
-    Scene::AddComponent<Transform>(ai);
+    scene.AddComponent<Transform>(player);
+    scene.AddComponent<Health>(player);
+    scene.AddComponent<UpdateComponent>(player);
 
-    Entity ei = Scene::CreateEntity();
-    Scene::AddComponent<Transform>(ei);
-    Scene::AddComponent<Health>(ei);
-
-    Elgine::Render      = Render;
-    Elgine::FixedUpdate = FixedUpdate;
-    Elgine::Update      = Update;
-    Elgine::Start       = Start;
-
-    std::cout << "Before Loop\n";
-
-    for (Entity& e : SceneView<Transform, Health>()) {
-        std::cout << e.id << " Hello!\n";
-    }
-
-    for (auto& e : SceneView<>()) {
-        std::cout << e.id << " ALL\n";
-    }
+    Player ei = Entity::Create<Player>(scene);
+    scene.AddComponent<Health>(ei);
+    scene.AddComponent<Transform>(ei);
 }
-
-void GameManager::Start() {}
-
-void GameManager::Update() {}
-
-void GameManager::FixedUpdate() {}
-
-void GameManager::Render() {}

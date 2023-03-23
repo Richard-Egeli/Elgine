@@ -6,34 +6,13 @@
 #include <SDL2/SDL_timer.h>
 
 #include <iostream>
+#include <vector>
 
 #include "debug.hpp"
 #include "ecs.hpp"
 #include "time.hpp"
 
-OnStart Elgine::Start             = nullptr;
-OnUpdate Elgine::Update           = nullptr;
-OnFixedUpdate Elgine::FixedUpdate = nullptr;
-OnRender Elgine::Render           = nullptr;
-
-Scene Elgine::Scene;
-
-Elgine::Elgine() {
-    isRunning = true;
-    CHECK_TRUE(SDL_Init(SDL_INIT_EVERYTHING) == 0);
-    CHECK_NULL(window = SDL_CreateWindow("Elgine",
-                                         SDL_WINDOWPOS_CENTERED,
-                                         SDL_WINDOWPOS_CENTERED,
-                                         800,
-                                         600,
-                                         0));
-
-    CHECK_NULL(renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED));
-
-    Debug::Log("Elgine Initialized!");
-}
-
-Elgine::~Elgine() {}
+std::vector<Scene> Elgine::scenes;
 
 void Elgine::Input() {
     SDL_Event event;
@@ -49,12 +28,25 @@ void Elgine::Input() {
                 }
 
                 break;
-            default:
-                SDL_PumpEvents();
-                break;
         }
     }
 }
+
+Elgine::Elgine() {
+    isRunning = true;
+    SDL_Init(SDL_INIT_EVERYTHING);
+
+    window =
+        SDL_CreateWindow("Elgine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
+    if (Debug::CheckNull(window, "Window is NULL!")) return;
+
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (Debug::CheckNull(renderer, "Renderer is NULL!")) return;
+
+    Debug::Log("Elgine Initialized!");
+}
+
+Elgine::~Elgine() {}
 
 void Elgine::GameLoop() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -65,24 +57,31 @@ void Elgine::GameLoop() {
     double currentTime = SDL_GetTicks64() / 1000.0;
     double accumulator = 0.0;
 
-    Elgine::Start();
-
     while (isRunning) {
+        // Dev Inputs
         Input();
+        //
 
         double newTime   = SDL_GetTicks64() / 1000.0;
         double frameTime = newTime - currentTime;
 
-        if (frameTime > 0.25)
-            frameTime = 0.25;
+        if (frameTime > 0.25) frameTime = 0.25;
 
         currentTime = newTime;
         accumulator += frameTime;
 
-        Elgine::Update();
+        for (Scene& scene : scenes) {
+            if (scene.disabled) continue;
+
+            for (auto system : scene.update) system.func(scene);
+        }
 
         while (accumulator >= dt) {
-            Elgine::FixedUpdate();
+            for (Scene& scene : scenes) {
+                if (scene.disabled) continue;
+
+                for (auto system : scene.physics) system.func(scene);
+            }
 
             accumulator -= dt;
             t += dt;
@@ -94,7 +93,11 @@ void Elgine::GameLoop() {
         SDL_RenderClear(renderer);
 
         // DRAW GRAPHICS
-        Elgine::Render();
+        for (Scene& scene : scenes) {
+            if (scene.disabled) continue;
+
+            for (auto system : scene.render) system.func(scene);
+        }
 
         SDL_RenderPresent(renderer);
     }
@@ -107,4 +110,11 @@ void Elgine::Run() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+}
+
+Scene& Elgine::CreateScene(void) {
+    Scene scene;
+    scenes.push_back(scene);
+
+    return scenes.back();
 }

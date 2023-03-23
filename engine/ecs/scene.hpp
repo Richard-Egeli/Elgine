@@ -4,43 +4,87 @@
 #include <iostream>
 #include <vector>
 
+#include "base.hpp"
+#include "component-pool.hpp"
 #include "component.hpp"
-#include "entity.hpp"
-#include "pool.hpp"
 
-static std::vector<Entity> entities;
-static std::vector<Pool*> components;
+struct Scene;
+
+typedef void (*System)(Scene& scene);
+
+enum SystemType { Input, Update, Physics, Render };
+
+struct SystemDesc {
+    size_t dependents;
+    System func;
+};
 
 struct Scene {
-    static std::vector<Entity>& GetEntities() { return entities; }
+    std::vector<Base> entities;
+    std::vector<ComponentPool*> components;
 
-    static Entity CreateEntity() {
-        Entity entity;
+    std::vector<SystemDesc> input;
+    std::vector<SystemDesc> update;
+    std::vector<SystemDesc> physics;
+    std::vector<SystemDesc> render;
+
+    bool disabled;
+
+    void AddEntity(Base& entity) {
         for (int i = 0; i < entities.size(); i++) {
             if (entities[i].destroyed) {
                 entity.id   = i;
                 entities[i] = entity;
-                return entities[i];
+                return;
             }
         }
 
         entity.id = entities.size();
         entities.push_back(entity);
-
-        return entities.back();
     }
 
-    static void DestroyEntity(Entity& entity) {
+    void DestroyEntity(Base& entity) {
         entities[entity.id].destroyed = true;
         entity.destroyed              = true;
     }
 
+    void AddSystem(System func, SystemType type = SystemType::Update) {
+        std::vector<SystemDesc>* data;
+
+        switch (type) {
+            case SystemType::Input:
+                data = &input;
+                break;
+            case SystemType::Update:
+                data = &update;
+                break;
+            case SystemType::Physics:
+                data = &physics;
+                break;
+            case SystemType::Render:
+                data = &render;
+                break;
+        }
+
+        for (int i = 0; i < data->size(); i++) {
+            if (data->at(i).func == func) {
+                data->at(i).dependents++;
+                return;
+            }
+        }
+
+        SystemDesc d;
+        d.func       = func;
+        d.dependents = 1;
+        data->push_back(d);
+    }
+
     template <typename T>
-    static T* AddComponent(Entity& entity) {
+    T* AddComponent(Base& entity) {
         ComponentId componentId = Component::GetId<T>();
 
         if (componentId >= components.size()) {
-            components.push_back(new Pool(sizeof(T)));
+            components.push_back(new ComponentPool(sizeof(T)));
         }
 
         T* component = new (components[componentId]->Get(entity.id)) T();
@@ -50,7 +94,7 @@ struct Scene {
     }
 
     template <typename T>
-    static void RemoveComponent(Entity& entity) {
+    void RemoveComponent(Base& entity) {
         ComponentId componentId = Component::GetId<T>();
 
         entities[entity.id].mask.reset(componentId);
