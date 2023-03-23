@@ -14,21 +14,20 @@ static std::vector<Pool*> components;
 struct Scene {
     static std::vector<Entity>& GetEntities() { return entities; }
 
-    static Entity* CreateEntity() {
+    static Entity CreateEntity() {
+        Entity entity;
         for (int i = 0; i < entities.size(); i++) {
             if (entities[i].destroyed) {
-                Entity entity;
                 entity.id   = i;
                 entities[i] = entity;
-                return &entities[i];
+                return entities[i];
             }
         }
 
-        Entity entity;
         entity.id = entities.size();
         entities.push_back(entity);
 
-        return &entities.back();
+        return entities.back();
     }
 
     static void DestroyEntity(Entity& entity) {
@@ -37,15 +36,15 @@ struct Scene {
     }
 
     template <typename T>
-    static T* AddComponent(Entity* entity) {
-        ComponentId id = Component::GetId<T>();
+    static T* AddComponent(Entity& entity) {
+        ComponentId componentId = Component::GetId<T>();
 
-        if (id >= components.size()) {
+        if (componentId >= components.size()) {
             components.push_back(new Pool(sizeof(T)));
         }
 
-        T* component = new (components[id]->Get(entity->id)) T();
-        entities[entity->id].mask.set(id);
+        T* component = new (components[componentId]->Get(entity.id)) T();
+        entities[entity.id].mask.set(componentId);
 
         return component;
     }

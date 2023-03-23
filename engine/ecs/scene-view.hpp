@@ -23,9 +23,9 @@ struct SceneView {
 
     struct Iterator {
         Iterator(EntityIndex index, ComponentMask mask, bool all)
-            : index(index), mask(mask), all(all) {}
+            : index(index), componentMask(mask), all(all) {}
 
-        Entity* operator*() const { return &Scene::GetEntities()[index]; }
+        Entity& operator*() const { return Scene::GetEntities()[index]; }
 
         bool operator==(const Iterator& other) const {
             return index == other.index || index == Scene::GetEntities().size();
@@ -36,45 +36,46 @@ struct SceneView {
         }
 
         bool ValidIndex() {
-            return
-                // It has the correct component mask
-                (all || mask == (mask & Scene::GetEntities()[index].mask));
+            ComponentMask mask = componentMask & Scene::GetEntities()[index].mask;
+            bool destroyed     = Scene::GetEntities()[index].destroyed;
+            bool result        = mask == componentMask && !destroyed;
+
+            return result;
         }
 
         Iterator& operator++() {
             // Move the iterator forward
             do {
                 index++;
-            } while (index < Scene::GetEntities().size() && !ValidIndex() &&
-                     Scene::GetEntities()[index].destroyed);
+            } while (index < Scene::GetEntities().size() && !ValidIndex());
+
             return *this;
         }
 
         EntityIndex index;
-        ComponentMask mask;
+        ComponentMask componentMask;
         bool all{false};
     };
 
     const Iterator begin() const {
-        int firstIndex = 0;
         size_t size    = Scene::GetEntities().size();
+        int startIndex = 0;
 
-        while (firstIndex < size) {
-            ComponentMask mask = componentMask & Scene::GetEntities()[firstIndex].mask;
-            bool destroyed     = Scene::GetEntities()[firstIndex].destroyed;
+        while (startIndex < size) {
+            ComponentMask mask = componentMask & Scene::GetEntities()[startIndex].mask;
+            bool destroyed     = Scene::GetEntities()[startIndex].destroyed;
+
             if (mask == componentMask && !destroyed) {
                 break;
             }
 
-            firstIndex++;
+            startIndex++;
         }
 
-        return Iterator(firstIndex, componentMask, all);
+        return Iterator(startIndex, componentMask, all);
     }
 
-    const Iterator end() const {
-        return Iterator(EntityIndex(Scene::GetEntities().size()), componentMask, all);
-    }
+    const Iterator end() const { return Iterator(Scene::GetEntities().size(), componentMask, all); }
 
     ComponentMask componentMask;
     bool all{false};
