@@ -30,6 +30,8 @@ struct Scene {
 
     bool disabled;
 
+    Scene() : disabled(false) {}
+
     void AddEntity(Base& entity) {
         for (int i = 0; i < entities.size(); i++) {
             if (entities[i].destroyed) {
@@ -90,6 +92,16 @@ struct Scene {
         T* component = new (components[componentId]->Get(entity.id)) T();
         entities[entity.id].mask.set(componentId);
 
+        return component;
+    }
+
+    template <typename T>
+    T* GetComponent(Base& entity) {
+        ComponentId componentId = Component::GetId<T>();
+
+        if (!entities[entity.id].mask.test(componentId)) return nullptr;
+
+        T* component = static_cast<T*>(components[componentId]->Get(entity.id));
         return component;
     }
 

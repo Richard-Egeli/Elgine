@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-static void Test(Scene& scene) { std::cout << "System works!\n"; }
+#include "scene.hpp"
+#include "time.hpp"
 
 void Player::Setup(Scene& scene) {
     //;

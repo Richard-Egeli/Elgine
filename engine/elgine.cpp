@@ -10,9 +10,13 @@
 
 #include "debug.hpp"
 #include "ecs.hpp"
+#include "frame-manager.hpp"
 #include "time.hpp"
 
-std::vector<Scene> Elgine::scenes;
+std::vector<Scene> Elgine::Scenes;
+
+SDL_Renderer* Elgine::Renderer = nullptr;
+SDL_Window* Elgine::Window     = nullptr;
 
 void Elgine::Input() {
     SDL_Event event;
@@ -36,20 +40,24 @@ Elgine::Elgine() {
     isRunning = true;
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    window =
+    Window =
         SDL_CreateWindow("Elgine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
-    if (Debug::CheckNull(window, "Window is NULL!")) return;
+    if (Debug::CheckNull(Window, "Window is NULL!")) return;
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (Debug::CheckNull(renderer, "Renderer is NULL!")) return;
+    Renderer = SDL_CreateRenderer(Window, -1, SDL_RENDERER_ACCELERATED);
+    if (Debug::CheckNull(Renderer, "Renderer is NULL!")) return;
 
     Debug::Log("Elgine Initialized!");
+
+    // Scene to add development tools to
+    Scene& scene              = Elgine::CreateScene();
+    FrameManager frameManager = Entity::Create<FrameManager>(scene);
 }
 
 Elgine::~Elgine() {}
 
 void Elgine::GameLoop() {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
 
     double t  = 0.0;
     double dt = 1.0 / 60.0;
@@ -70,14 +78,15 @@ void Elgine::GameLoop() {
         currentTime = newTime;
         accumulator += frameTime;
 
-        for (Scene& scene : scenes) {
+        for (Scene& scene : Scenes) {
+            // std::cout << "TRIGGER\n";
             if (scene.disabled) continue;
 
             for (auto system : scene.update) system.func(scene);
         }
 
         while (accumulator >= dt) {
-            for (Scene& scene : scenes) {
+            for (Scene& scene : Scenes) {
                 if (scene.disabled) continue;
 
                 for (auto system : scene.physics) system.func(scene);
@@ -90,16 +99,16 @@ void Elgine::GameLoop() {
         Time::deltaTime = accumulator / dt;
         Time::time      = currentTime;
 
-        SDL_RenderClear(renderer);
+        SDL_RenderClear(Renderer);
 
         // DRAW GRAPHICS
-        for (Scene& scene : scenes) {
+        for (Scene& scene : Scenes) {
             if (scene.disabled) continue;
 
             for (auto system : scene.render) system.func(scene);
         }
 
-        SDL_RenderPresent(renderer);
+        SDL_RenderPresent(Renderer);
     }
 }
 
@@ -107,14 +116,14 @@ void Elgine::Run() {
     Debug::Log("Elgine Game Loop Starting!");
     GameLoop();
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(Renderer);
+    SDL_DestroyWindow(Window);
     SDL_Quit();
 }
 
 Scene& Elgine::CreateScene(void) {
     Scene scene;
-    scenes.push_back(scene);
+    Scenes.push_back(scene);
 
-    return scenes.back();
+    return Scenes.back();
 }

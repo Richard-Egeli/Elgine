@@ -9,11 +9,11 @@ struct Entity : public Base {
     static T Create(Scene& scene) {
         static_assert(std::is_base_of<Entity, T>::value, "Type is not base of Entity");
 
-        T ent;
-        scene.AddEntity(ent);
-        ent.Setup(scene);
+        T entity;
+        scene.AddEntity(entity);
+        entity.Setup(scene);
 
-        return ent;
+        return entity;
     }
 
     virtual void Setup(Scene& scene) = 0;

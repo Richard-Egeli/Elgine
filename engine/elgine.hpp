@@ -18,10 +18,10 @@ class Elgine {
     void Run();
 
  public:
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+    static SDL_Window* Window;
+    static SDL_Renderer* Renderer;
 
-    static std::vector<Scene> scenes;
+    static std::vector<Scene> Scenes;
 
     static Scene& CreateScene(void);
 
