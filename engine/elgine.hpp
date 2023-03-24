@@ -1,6 +1,8 @@
 #ifndef ENGINE_ELGINE_H_
 #define ENGINE_ELGINE_H_
 
+#include <SDL2/SDL_video.h>
+
 #include <vector>
 
 #include "component.hpp"
@@ -19,10 +21,8 @@ class Elgine {
 
  public:
     static SDL_Window* Window;
-    static SDL_Renderer* Renderer;
-
+    static SDL_GLContext Context;
     static std::vector<Scene> Scenes;
-
     static Scene& CreateScene(void);
 
  private:

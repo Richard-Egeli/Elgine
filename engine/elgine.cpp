@@ -1,22 +1,33 @@
 #include "elgine.hpp"
 
 #include <SDL.h>
+#include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_video.h>
 
 #include <iostream>
+#include <string>
 #include <vector>
 
 #include "debug.hpp"
 #include "ecs.hpp"
 #include "frame-manager.hpp"
+#include "loader.hpp"
 #include "time.hpp"
 
 std::vector<Scene> Elgine::Scenes;
+//
+SDL_Window* Elgine::Window;
+SDL_GLContext Elgine::Context;
 
-SDL_Renderer* Elgine::Renderer = nullptr;
-SDL_Window* Elgine::Window     = nullptr;
+static void DrawSomething() {
+    std::string shader = Loader::Shader("../engine/shaders/test.vert");
+
+    std::cout << shader << std::endl;
+}
 
 void Elgine::Input() {
     SDL_Event event;
@@ -38,27 +49,49 @@ void Elgine::Input() {
 
 Elgine::Elgine() {
     isRunning = true;
-    SDL_Init(SDL_INIT_EVERYTHING);
 
-    Window =
-        SDL_CreateWindow("Elgine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
+    SDL_Init(SDL_INIT_VIDEO);
+
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+    this->Window = SDL_CreateWindow("Elgine",
+                                    SDL_WINDOWPOS_CENTERED,
+                                    SDL_WINDOWPOS_CENTERED,
+                                    800,
+                                    600,
+                                    SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+
     if (Debug::CheckNull(Window, "Window is NULL!")) return;
 
-    Renderer = SDL_CreateRenderer(Window, -1, SDL_RENDERER_ACCELERATED);
-    if (Debug::CheckNull(Renderer, "Renderer is NULL!")) return;
+    this->Context = SDL_GL_CreateContext(Window);
 
-    Debug::Log("Elgine Initialized!");
+    if (this->Context == nullptr) {
+        std::cout << "Failed to create OpenGL Context: " << SDL_GetError() << "\n";
+    }
+
+    SDL_GL_MakeCurrent(Window, Context);
+
+    std::string err = SDL_GetError();
+    if (err.length() > 0) {
+        std::cout << RED << "SDL2 ERROR: " << err << NOR << std::endl;
+    }
+
+    Debug::Log("SDL2 Initialized!");
 
     // Scene to add development tools to
     Scene& scene              = Elgine::CreateScene();
     FrameManager frameManager = Entity::Create<FrameManager>(scene);
+
+    SDL_GL_SetSwapInterval(1);
 }
 
 Elgine::~Elgine() {}
 
 void Elgine::GameLoop() {
-    SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
-
     double t  = 0.0;
     double dt = 1.0 / 60.0;
 
@@ -68,7 +101,6 @@ void Elgine::GameLoop() {
     while (isRunning) {
         // Dev Inputs
         Input();
-        //
 
         double newTime   = SDL_GetTicks64() / 1000.0;
         double frameTime = newTime - currentTime;
@@ -79,7 +111,6 @@ void Elgine::GameLoop() {
         accumulator += frameTime;
 
         for (Scene& scene : Scenes) {
-            // std::cout << "TRIGGER\n";
             if (scene.disabled) continue;
 
             for (auto system : scene.update) system.func(scene);
@@ -99,16 +130,19 @@ void Elgine::GameLoop() {
         Time::deltaTime = accumulator / dt;
         Time::time      = currentTime;
 
-        SDL_RenderClear(Renderer);
-
         // DRAW GRAPHICS
+        glClearColor(1.0, 1.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        DrawSomething();
+
         for (Scene& scene : Scenes) {
             if (scene.disabled) continue;
 
             for (auto system : scene.render) system.func(scene);
         }
 
-        SDL_RenderPresent(Renderer);
+        SDL_GL_SwapWindow(Window);
     }
 }
 
@@ -116,7 +150,6 @@ void Elgine::Run() {
     Debug::Log("Elgine Game Loop Starting!");
     GameLoop();
 
-    SDL_DestroyRenderer(Renderer);
     SDL_DestroyWindow(Window);
     SDL_Quit();
 }

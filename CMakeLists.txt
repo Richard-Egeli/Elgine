@@ -14,6 +14,7 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET 13.1)
 add_library(ElgineEngine STATIC)
 add_library(ElgineGame STATIC)
 
+add_subdirectory(shaders)
 add_subdirectory(engine)
 add_subdirectory(game)
 
