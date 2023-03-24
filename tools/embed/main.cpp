@@ -95,8 +95,8 @@ void stringify(string* content) {
         if (pos >= content->size()) break;
 
         content->insert(pos + 1, "\"");
-        content->insert(pos, "\"");
-        it = pos + 2;
+        content->insert(pos, "\\n\"");
+        it = pos + 4;
     }
 }
 

@@ -1,20 +1,17 @@
 #include "shaders.hpp"
 
-const char* SHADER_new_shader_vert = "#version 150"
-"in  vec2 in_Position;"
-"in  vec3 in_Color;"
-"out vec3 ex_Color;"
-"void main(void) {"
-"gl_Position = vec4(in_Position.x, in_Position.y, 0.0, 1.0);"
-"ex_Color = in_Color;"
+const char* SHADER_tutorial_vert = "#version 330 core\n"
+"layout (location = 0) in vec3 aPos;\n"
+"void main()\n"
+"{\n"
+"gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 "}";
 
-const char* SHADER_test_vert = "#version 150"
-"in  vec2 in_Position;"
-"in  vec3 in_Color;"
-"out vec3 ex_Color;"
-"void main(void) {    "
-"gl_Position = vec4(in_Position.x, in_Position.y, 0.0, 1.0);"
-"ex_Color = in_Color;"
+const char* SHADER_tutorial_frag = "#version 150\n"
+"precision highp float;\n"
+"in  vec3 ex_Color;\n"
+"out vec4 gl_FragColor;\n"
+"void main(void) {\n"
+"gl_FragColor = vec4(ex_Color,1.0);\n"
 "}";
 

@@ -5,15 +5,13 @@
 #include "shaders.hpp"
 
 int main(int argc, char **argv) {
-    // Elgine *elgine = new Elgine();
+    Elgine *elgine = new Elgine();
 
-    // GameManager::Init();
-
-    std::cout << SHADER_new_shader_vert << std::endl;
+    GameManager::Init();
 
     // elgine->Run();
 
-    // delete elgine;
+    delete elgine;
 
     return 0;
 }

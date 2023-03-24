@@ -1,5 +1,7 @@
 #include "elgine.hpp"
 
+#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl3.h>
 #include <SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>
@@ -16,6 +18,7 @@
 #include "ecs.hpp"
 #include "frame-manager.hpp"
 #include "loader.hpp"
+#include "shaders.hpp"
 #include "time.hpp"
 
 std::vector<Scene> Elgine::Scenes;
@@ -24,9 +27,28 @@ SDL_Window* Elgine::Window;
 SDL_GLContext Elgine::Context;
 
 static void DrawSomething() {
-    std::string shader = Loader::Shader("../engine/shaders/test.vert");
+    GLuint VBO;
+    unsigned int vertexShader;
 
-    std::cout << shader << std::endl;
+    float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f};
+
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &SHADER_tutorial_vert, NULL);
+    glCompileShader(vertexShader);
+
+    int success;
+    char infoLog[512];
+
+    glGetShaderiv(1, GL_COMPILE_STATUS, &success);
+
+    if (!success) {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "SHADER FAILED TO COMPILE: " << infoLog << std::endl;
+    }
 }
 
 void Elgine::Input() {
@@ -52,8 +74,8 @@ Elgine::Elgine() {
 
     SDL_Init(SDL_INIT_VIDEO);
 
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -87,6 +109,8 @@ Elgine::Elgine() {
     FrameManager frameManager = Entity::Create<FrameManager>(scene);
 
     SDL_GL_SetSwapInterval(1);
+
+    DrawSomething();
 }
 
 Elgine::~Elgine() {}
