@@ -50,7 +50,7 @@ struct Scene {
         entity.destroyed              = true;
     }
 
-    void AddSystem(System func, SystemType type = SystemType::Update) {
+    void AddSystem(System func, SystemType type) {
         std::vector<SystemDesc>* data;
 
         switch (type) {
