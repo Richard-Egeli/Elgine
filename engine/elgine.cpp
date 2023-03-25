@@ -10,6 +10,7 @@
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 
+#include <cstddef>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -26,19 +27,30 @@ std::vector<Scene> Elgine::Scenes;
 SDL_Window* Elgine::Window;
 SDL_GLContext Elgine::Context;
 
-static void DrawSomething() {
-    GLuint VBO;
-    unsigned int vertexShader;
+static GLuint VBO, VAO, vShader, fShader, program;
 
+static void GL_Draw() {
+    glUseProgram(program);
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+static void GL_InitDraw() {
     float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f};
 
     glGenBuffers(1, &VBO);
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &SHADER_tutorial_vert, NULL);
-    glCompileShader(vertexShader);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    vShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vShader, 1, &SHADER_tutorial_vert, NULL);
+    glCompileShader(vShader);
 
     int success;
     char infoLog[512];
@@ -46,9 +58,27 @@ static void DrawSomething() {
     glGetShaderiv(1, GL_COMPILE_STATUS, &success);
 
     if (!success) {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        glGetShaderInfoLog(vShader, 512, NULL, infoLog);
         std::cout << "SHADER FAILED TO COMPILE: " << infoLog << std::endl;
     }
+
+    fShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fShader, 1, &SHADER_tutorial_frag, NULL);
+    glCompileShader(fShader);
+
+    program = glCreateProgram();
+    glAttachShader(program, vShader);
+    glAttachShader(program, fShader);
+    glLinkProgram(program);
+
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
+
+    if (!success) {
+        glGetProgramInfoLog(program, 512, NULL, infoLog);
+        std::cout << "PROGRAM FAILED TO LINK: " << infoLog << std::endl;
+    }
+
+    glUseProgram(program);
 }
 
 void Elgine::Input() {
@@ -110,7 +140,7 @@ Elgine::Elgine() {
 
     SDL_GL_SetSwapInterval(1);
 
-    DrawSomething();
+    GL_InitDraw();
 }
 
 Elgine::~Elgine() {}
@@ -155,10 +185,10 @@ void Elgine::GameLoop() {
         Time::time      = currentTime;
 
         // DRAW GRAPHICS
-        glClearColor(1.0, 1.0, 0.0, 1.0);
+        glClearColor(0.1, 0.1, 0.1, 1.0);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        DrawSomething();
+        GL_Draw();
 
         for (Scene& scene : Scenes) {
             if (scene.disabled) continue;
