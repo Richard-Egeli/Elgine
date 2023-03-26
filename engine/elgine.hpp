@@ -2,6 +2,7 @@
 #define ENGINE_ELGINE_H_
 
 #include <SDL.h>
+#include <SDL2/SDL_video.h>
 
 #include <vector>
 

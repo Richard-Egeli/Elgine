@@ -8,7 +8,6 @@
 
 #include "debug.hpp"
 #include "mesh-rendering.hpp"
-#include "shaders.hpp"
 #include "time.hpp"
 
 std::vector<Scene> Elgine::Scenes;

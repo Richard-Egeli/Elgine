@@ -1,3 +1,3 @@
-target_include_directories(ElgineEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(ElgineGame PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_sources(ElgineEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/shaders.cpp)
+target_sources(ElgineGame PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/shaders.cpp)
