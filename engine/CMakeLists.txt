@@ -14,7 +14,12 @@ add_subdirectory(types)
 add_subdirectory(systems)
 add_subdirectory(lib)
 
+
 target_include_directories(ElgineEngine PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+
+    INTERFACE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ecs.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/elgine.hpp
 )
 

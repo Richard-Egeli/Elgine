@@ -11,9 +11,8 @@ void MeshRendering(Scene& scene) {
     for (auto& entity : SceneView<Mesh, Transform>(scene)) {
         Mesh* mesh = scene.GetComponent<Mesh>(entity);
 
-        if (mesh == nullptr) continue;
+        if (mesh == nullptr || !mesh->shader.id) continue;
 
-        // std::cout << glGetError() << std::endl;
         glUseProgram(mesh->shader.id);
 
         for (int i = 0; i < mesh->textures.size(); i++) {

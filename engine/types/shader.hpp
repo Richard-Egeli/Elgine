@@ -25,6 +25,7 @@ struct Shader {
     ~Shader();
 
     void Use() const;
+    void Clear();
 
     template <typename T>
     void Set(const char* source) {

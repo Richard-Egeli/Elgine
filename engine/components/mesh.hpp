@@ -1,10 +1,10 @@
-#ifndef ELGINE_ENGINE_COMPONENTS_MESH_HPP_
-#define ELGINE_ENGINE_COMPONENTS_MESH_HPP_
+#ifndef ELGINE_COMPONENTS_MESH_HPP_
+#define ELGINE_COMPONENTS_MESH_HPP_
 
 #include <array>
 #include <vector>
 
-#include "opengl.hpp"
+#include "../opengl.hpp"
 #include "shader.hpp"
 #include "texture.hpp"
 #include "vertex.hpp"
@@ -23,11 +23,13 @@ struct Mesh {
     void SetMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 
     void SetShader(const char* vertexShader, const char* fragmentShader);
+    void ClearShader();
 
     void SetTexture(Texture texture, unsigned int slot = 0);
+    void ClearTexture(unsigned int slot);
 
  private:
     void UpdateShaderTextures();
 };
 
-#endif  // ELGINE_ENGINE_COMPONENTS_MESH_HPP_
+#endif  // ELGINE_COMPONENTS_MESH_HPP_

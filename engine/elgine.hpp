@@ -1,16 +1,15 @@
 #ifndef ENGINE_ELGINE_H_
 #define ENGINE_ELGINE_H_
 
-#include <SDL2/SDL_video.h>
+#include <SDL.h>
 
 #include <vector>
 
-#include "component.hpp"
 #include "debug.hpp"
+#include "ecs/component.hpp"
 #include "time.hpp"
 
 class SDL_Window;
-class SDL_Renderer;
 struct Scene;
 
 class Elgine {

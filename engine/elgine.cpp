@@ -7,7 +7,6 @@
 #include <string>
 
 #include "debug.hpp"
-#include "ecs.hpp"
 #include "mesh-rendering.hpp"
 #include "shaders.hpp"
 #include "time.hpp"

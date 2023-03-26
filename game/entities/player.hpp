@@ -1,7 +1,7 @@
 #ifndef GAME_COMPONENTS_PLAYER_HPP_
 #define GAME_COMPONENTS_PLAYER_HPP_
 
-#include "entity.hpp"
+#include "ecs/entity.hpp"
 
 struct Player : public Entity {
  public:

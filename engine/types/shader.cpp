@@ -1,10 +1,8 @@
 #include "shader.hpp"
 
-#include <OpenGL/OpenGL.h>
-
 #include <iostream>
 
-#include "opengl.hpp"
+#include "../opengl.hpp"
 
 Shader::Shader() {}
 
@@ -22,6 +20,16 @@ void Shader::Link() {
 }
 
 void Shader::Use() const { glUseProgram(this->id); }
+
+void Shader::Clear() {
+    glDeleteShader(this->vertex);
+    glDeleteShader(this->fragment);
+    glDeleteProgram(this->id);
+
+    this->vertex   = 0;
+    this->fragment = 0;
+    this->id       = 0;
+}
 
 void Shader::SetVertex(VertexShader source) {
     glDeleteShader(this->vertex);

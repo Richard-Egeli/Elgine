@@ -4,7 +4,6 @@
 
 #include "asset-loader.hpp"
 #include "mesh.hpp"
-#include "scene.hpp"
 #include "shaders.hpp"
 #include "texture.hpp"
 #include "time.hpp"

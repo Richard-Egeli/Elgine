@@ -62,12 +62,21 @@ void Mesh::SetShader(const char* vertexShader, const char* fragmentShader) {
     if (textures.size()) UpdateShaderTextures();
 }
 
+void Mesh::ClearShader() { shader.Clear(); }
+
 void Mesh::SetTexture(Texture texture, unsigned int slot) {
     if (slot < this->textures.size()) {
         // Clean up the old texture if it exists
-        if (this->textures[slot] != 0) AssetLoader::UnloadTexture(this->textures[slot]);
+        if (!this->textures[slot]) AssetLoader::Unload<Texture>(this->textures[slot]);
 
         this->textures[slot] = texture;
         UpdateShaderTextures();
+    }
+}
+
+void Mesh::ClearTexture(unsigned int slot) {
+    if (this->textures[slot] != 0) {
+        AssetLoader::Unload<Texture>(this->textures[slot]);
+        this->textures[slot] = 0;
     }
 }

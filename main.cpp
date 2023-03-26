@@ -1,5 +1,3 @@
-
-
 #include "elgine.hpp"
 #include "game/gamemanager.hpp"
 #include "shaders.hpp"
