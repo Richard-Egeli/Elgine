@@ -1,25 +1,14 @@
 #include "elgine.hpp"
-
-#include <OpenGL/OpenGL.h>
-#include <OpenGL/gl3.h>
+//
 #include <SDL.h>
-#include <SDL2/SDL_error.h>
-#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_opengl.h>
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_timer.h>
-#include <SDL2/SDL_video.h>
 
-#include <array>
-#include <cstddef>
 #include <iostream>
 #include <string>
-#include <vector>
 
 #include "debug.hpp"
 #include "ecs.hpp"
 #include "frame-manager.hpp"
-#include "loader.hpp"
 #include "mesh-rendering.hpp"
 #include "shaders.hpp"
 #include "time.hpp"

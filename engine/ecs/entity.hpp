@@ -4,6 +4,7 @@
 #include <type_traits>
 
 #include "scene.hpp"
+
 struct Entity : public Base {
     template <typename T>
     static T Create(Scene& scene) {

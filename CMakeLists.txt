@@ -13,6 +13,8 @@ include_directories(${OPENGL_INCLUDE_DIR} ${SDL2_INCLUDE_DIR})
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 13.1)
 
+set(CMAKE_CXX_FLAGS "")
+
 add_library(ElgineEngine STATIC)
 add_library(ElgineGame STATIC)
 

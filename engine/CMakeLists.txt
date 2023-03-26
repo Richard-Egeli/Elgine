@@ -12,6 +12,7 @@ add_subdirectory(components)
 add_subdirectory(entities)
 add_subdirectory(types)
 add_subdirectory(systems)
+add_subdirectory(lib)
 
 target_include_directories(ElgineEngine PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
