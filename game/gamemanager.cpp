@@ -1,11 +1,9 @@
 #include "gamemanager.hpp"
 
-#include "elgine.hpp"
-#include "mesh-rendering.hpp"
-#include "mesh.hpp"
+#include "elgine/elgine.hpp"
+#include "elgine/systems.hpp"
+#include "elgine/utils.hpp"
 #include "player.hpp"
-#include "time.hpp"
-#include "transform.hpp"
 
 void GameManager::Init() {
     Scene& scene  = Elgine::CreateScene();

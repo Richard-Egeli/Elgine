@@ -23,10 +23,12 @@ target_link_libraries(ElgineGame ElgineEngine)
 
 add_executable(Elgine main.cpp)
 
-target_link_libraries(Elgine 
-    ElgineEngine
+target_link_libraries(Elgine PUBLIC
     ElgineGame
+
     ${OPENGL_LIBRARIES} 
     ${SDL2_LIBRARIES}
+    INTERFACE
+    ElgineEngine
 )
 

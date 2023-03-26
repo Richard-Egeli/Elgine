@@ -6,9 +6,8 @@
 
 #include <vector>
 
-#include "debug.hpp"
-#include "ecs/component.hpp"
-#include "time.hpp"
+#include "elgine/components.hpp"
+#include "elgine/utils.hpp"
 
 class SDL_Window;
 struct Scene;

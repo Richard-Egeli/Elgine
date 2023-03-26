@@ -5,7 +5,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "texture.hpp"
+#include "../types/texture.hpp"
 
 class AssetLoader {
  private:

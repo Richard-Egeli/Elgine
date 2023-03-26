@@ -2,10 +2,10 @@
 
 #include <iostream>
 
-#include "asset-loader.hpp"
+#include "../types/shader.hpp"
+#include "../types/vertex.hpp"
+#include "../utils/asset-loader.hpp"
 #include "opengl.hpp"
-#include "shader.hpp"
-#include "vertex.hpp"
 
 Mesh::Mesh() {}
 

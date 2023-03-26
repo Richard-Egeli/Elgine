@@ -6,9 +6,9 @@
 #include <iostream>
 #include <string>
 
-#include "debug.hpp"
-#include "mesh-rendering.hpp"
-#include "time.hpp"
+#include "systems/mesh-rendering.hpp"
+#include "utils/debug.hpp"
+#include "utils/time.hpp"
 
 std::vector<Scene> Elgine::Scenes;
 

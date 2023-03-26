@@ -1,4 +1,4 @@
-#include "elgine.hpp"
+#include "elgine/elgine.hpp"
 #include "game/gamemanager.hpp"
 #include "shaders.hpp"
 

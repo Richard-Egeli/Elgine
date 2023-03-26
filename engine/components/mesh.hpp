@@ -5,9 +5,9 @@
 #include <vector>
 
 #include "../opengl.hpp"
-#include "shader.hpp"
-#include "texture.hpp"
-#include "vertex.hpp"
+#include "../types/shader.hpp"
+#include "../types/texture.hpp"
+#include "../types/vertex.hpp"
 
 struct Mesh {
     GLuint vbo;

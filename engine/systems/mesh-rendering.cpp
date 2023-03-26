@@ -2,10 +2,9 @@
 
 #include <iostream>
 
-#include "mesh.hpp"
+#include "elgine/components.hpp"
+#include "elgine/ecs.hpp"
 #include "opengl.hpp"
-#include "scene-view.hpp"
-#include "transform.hpp"
 
 void MeshRendering(Scene& scene) {
     for (auto& entity : SceneView<Mesh, Transform>(scene)) {

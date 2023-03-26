@@ -6,10 +6,9 @@
 #include <sstream>
 #include <string>
 
-#include "elgine.hpp"
+#include "../elgine.hpp"
+#include "lib/stb_image.hpp"
 #include "opengl.hpp"
-#include "stb_image.hpp"
-#include "texture.hpp"
 
 std::vector<TextureData> AssetLoader::Textures;
 

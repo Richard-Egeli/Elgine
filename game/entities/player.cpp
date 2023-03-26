@@ -2,13 +2,10 @@
 
 #include <iostream>
 
-#include "asset-loader.hpp"
-#include "mesh.hpp"
+#include "elgine/components.hpp"
+#include "elgine/types.hpp"
+#include "elgine/utils.hpp"
 #include "shaders.hpp"
-#include "texture.hpp"
-#include "time.hpp"
-#include "transform.hpp"
-#include "vertex.hpp"
 
 void Player::Setup(Scene& scene) {
     //;
