@@ -14,17 +14,18 @@
 void Player::Setup(Scene& scene) {
     //;
     scene.AddComponent<Transform>(*this);
-    Mesh* mesh       = scene.AddComponent<Mesh>(*this);
-    Texture* texture = AssetLoader::Load<Texture>("wall.jpg");
+    Mesh* mesh      = scene.AddComponent<Mesh>(*this);
+    Texture texture = AssetLoader::Load<Texture>("wall.jpg");
+    Texture awesome = AssetLoader::Load<Texture>("awesomeface.png");
 
-    std::array<Vertex, 65535> vertices = {
+    std::vector<Vertex> vertices = {
         Vertex(0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f),
         Vertex(0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f),
         Vertex(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f),
         Vertex(-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f),
     };
 
-    std::array<unsigned int, 6> indices = {
+    std::vector<unsigned int> indices = {
         // note that we start from 0!
         0,
         1,
@@ -36,5 +37,6 @@ void Player::Setup(Scene& scene) {
 
     mesh->SetMesh(vertices, indices);
     mesh->SetShader(SHADER_tutorial_vert, SHADER_tutorial_frag);
-    mesh->SetTexture(texture);
+    mesh->SetTexture(texture, 0);
+    mesh->SetTexture(awesome, 1);
 }

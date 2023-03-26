@@ -13,11 +13,14 @@ void MeshRendering(Scene& scene) {
 
         if (mesh == nullptr) continue;
 
-        glUseProgram(mesh->shaderProgram);
+        // std::cout << glGetError() << std::endl;
+        glUseProgram(mesh->shader.id);
 
-        if (mesh->texture) {
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, mesh->texture->id);
+        for (int i = 0; i < mesh->textures.size(); i++) {
+            if (mesh->textures[i] != 0) {
+                glActiveTexture(GL_TEXTURE0 + i);
+                glBindTexture(GL_TEXTURE_2D, mesh->textures[i]);
+            }
         }
 
         glBindVertexArray(mesh->vao);

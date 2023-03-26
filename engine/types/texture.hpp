@@ -4,20 +4,23 @@
 #include <string>
 
 #include "opengl.hpp"
-struct Texture {
-    unsigned int id;
+
+using Texture = unsigned int;
+
+struct TextureData {
+    Texture id;
     std::string path;
     unsigned char* buffer;
-
     int width, height, bpp;
+    unsigned int dependents;
 
-    void Bind(unsigned int slot = 0) const;
-    void Unbind() const;
-
-    Texture(unsigned int id, int width, int height, int bpp, std::string path)
-        : id(id), width(width), height(height), bpp(bpp), path(path) {}
-
-    ~Texture() { glDeleteTextures(1, &this->id); }
+    TextureData(unsigned int id,
+                int width,
+                int height,
+                int bpp,
+                std::string path,
+                int dependents = 1)
+        : id(id), width(width), height(height), bpp(bpp), path(path), dependents(dependents) {}
 };
 
 #endif  // ELGINE_ENGINE_TYPES_TEXTURE_HPP_

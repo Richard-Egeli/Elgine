@@ -8,13 +8,12 @@
 
 #include "debug.hpp"
 #include "ecs.hpp"
-#include "frame-manager.hpp"
 #include "mesh-rendering.hpp"
 #include "shaders.hpp"
 #include "time.hpp"
 
 std::vector<Scene> Elgine::Scenes;
-//
+
 SDL_Window* Elgine::Window;
 SDL_GLContext Elgine::Context;
 
@@ -41,8 +40,8 @@ Elgine::Elgine() {
 
     SDL_Init(SDL_INIT_VIDEO);
 
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -71,10 +70,6 @@ Elgine::Elgine() {
 
     Debug::Log("SDL2 Initialized!");
 
-    // Scene to add development tools to
-    Scene& scene              = Elgine::CreateScene();
-    FrameManager frameManager = Entity::Create<FrameManager>(scene);
-
     SDL_GL_SetSwapInterval(1);
 }
 
@@ -99,6 +94,8 @@ void Elgine::GameLoop() {
         currentTime = newTime;
         accumulator += frameTime;
 
+        FPSTick();
+
         for (Scene& scene : Scenes) {
             if (scene.disabled) continue;
 
@@ -106,6 +103,8 @@ void Elgine::GameLoop() {
         }
 
         while (accumulator >= dt) {
+            FixedFPSTick();
+
             for (Scene& scene : Scenes) {
                 if (scene.disabled) continue;
 
@@ -122,8 +121,6 @@ void Elgine::GameLoop() {
         // DRAW GRAPHICS
         glClearColor(0.1, 0.1, 0.1, 1.0);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        // GL_Draw();
 
         for (Scene& scene : Scenes) {
             if (scene.disabled) continue;

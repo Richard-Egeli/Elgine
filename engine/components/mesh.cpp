@@ -1,13 +1,17 @@
 #include "mesh.hpp"
 
-// #include <OpenGL/OpenGL.h>
-#include "opengl.hpp"
+#include <iostream>
 
-Mesh::Mesh() : texture(nullptr) {}
+#include "asset-loader.hpp"
+#include "opengl.hpp"
+#include "shader.hpp"
+#include "vertex.hpp"
+
+Mesh::Mesh() {}
 
 Mesh::~Mesh() {}
 
-void Mesh::SetMesh(std::array<Vertex, 65535> vertices, std::array<unsigned int, 6> indices) {
+void Mesh::SetMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) {
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
     glDeleteVertexArrays(1, &vao);
@@ -19,10 +23,12 @@ void Mesh::SetMesh(std::array<Vertex, 65535> vertices, std::array<unsigned int, 
     glBindVertexArray(vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+    size_t vertex_buffer_size = vertices.size() * sizeof(Vertex);
+    glBufferData(GL_ARRAY_BUFFER, vertex_buffer_size, &vertices[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
+    size_t index_buffer_size = indices.size() * sizeof(unsigned int);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_size, &indices[0], GL_STATIC_DRAW);
 
     // position
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
@@ -39,27 +45,29 @@ void Mesh::SetMesh(std::array<Vertex, 65535> vertices, std::array<unsigned int, 
     glBindVertexArray(0);
 }
 
-void Mesh::SetShader(const char* vertexShader, const char* fragmentShader) {
-    glDeleteShader(this->vertexShader);
-    glDeleteShader(this->fragmentShader);
-    glDeleteProgram(this->shaderProgram);
+void Mesh::UpdateShaderTextures() {
+    if (shader.id) {
+        shader.Use();
 
-    this->vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(this->vertexShader, 1, &vertexShader, NULL);
-    glCompileShader(this->vertexShader);
-
-    this->fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(this->fragmentShader, 1, &fragmentShader, NULL);
-    glCompileShader(this->fragmentShader);
-
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, this->vertexShader);
-    glAttachShader(shaderProgram, this->fragmentShader);
-    glLinkProgram(shaderProgram);
+        for (int i = 0; i < textures.size(); i++) {
+            std::string name = "texture" + std::to_string(i);
+            shader.Set<int>(name.c_str(), i);
+        }
+    }
 }
 
-void Mesh::SetTexture(Texture* texture) {
-    if (this->texture) delete this->texture;
+void Mesh::SetShader(const char* vertexShader, const char* fragmentShader) {
+    shader.Set<VertexShader>(vertexShader);
+    shader.Set<FragmentShader>(fragmentShader);
+    if (textures.size()) UpdateShaderTextures();
+}
 
-    this->texture = texture;
+void Mesh::SetTexture(Texture texture, unsigned int slot) {
+    if (slot < this->textures.size()) {
+        // Clean up the old texture if it exists
+        if (this->textures[slot] != 0) AssetLoader::UnloadTexture(this->textures[slot]);
+
+        this->textures[slot] = texture;
+        UpdateShaderTextures();
+    }
 }

@@ -3,16 +3,20 @@
 
 #include <string>
 #include <type_traits>
+#include <vector>
 
 #include "texture.hpp"
 
 struct AssetLoader {
-    const char* ASSET_PATH = "./assets/";
+    const static char* ASSET_PATH;
+    static std::vector<TextureData> Textures;
 
-    static Texture* LoadTexture(const char* path);
+    static Texture HasTexture(const char* path);
+    static Texture LoadTexture(const char* path);
+    static void UnloadTexture(const Texture texture);
 
     template <typename T>
-    static T* Load(const char* path) {
+    static T Load(const char* path) {
         if (std::is_same<T, Texture>::value) {
             return AssetLoader::LoadTexture(path);
         }
