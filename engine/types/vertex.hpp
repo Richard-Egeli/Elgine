@@ -2,11 +2,11 @@
 #define ELGINE_ENGINE_TYPES_VERTEX_HPP_
 
 #include "color.hpp"
+#include "vec3.hpp"
 #include "vector2.hpp"
-#include "vector3.hpp"
 
 struct Vertex {
-    Vector3 position;
+    Vec3<float> position;
     Color color;
     Vector2 uv;
 

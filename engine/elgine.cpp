@@ -1,5 +1,6 @@
 #include "elgine.hpp"
 //
+#include <OpenGL/OpenGL.h>
 #include <SDL.h>
 #include <SDL2/SDL_opengl.h>
 
@@ -69,6 +70,7 @@ Elgine::Elgine() {
     Debug::Log("SDL2 Initialized!");
 
     SDL_GL_SetSwapInterval(1);
+    glEnable(GL_DEPTH_TEST);
 }
 
 Elgine::~Elgine() {}
@@ -118,7 +120,7 @@ void Elgine::GameLoop() {
 
         // DRAW GRAPHICS
         glClearColor(0.1, 0.1, 0.1, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         for (Scene& scene : Scenes) {
             if (scene.disabled) continue;

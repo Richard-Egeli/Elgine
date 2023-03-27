@@ -1,3 +1,3 @@
-target_sources(ElgineEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/shader.cpp)
+target_sources(ElgineEngine PRIVATE shader.cpp quat.cpp)
 
-target_include_directories(ElgineEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(ElgineEngine PRIVATE .)

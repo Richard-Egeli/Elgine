@@ -1,5 +1,7 @@
 #include "player.hpp"
 
+#include <../lib/glm/glm.hpp>
+#include <../lib/glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
 #include "elgine/components.hpp"
@@ -8,11 +10,10 @@
 #include "shaders.hpp"
 
 void Player::Setup(Scene& scene) {
-    //;
-    scene.AddComponent<Transform>(*this);
-    Mesh* mesh      = scene.AddComponent<Mesh>(*this);
-    Texture texture = AssetLoader::Load<Texture>("wall.jpg");
-    Texture awesome = AssetLoader::Load<Texture>("awesomeface.png");
+    Transform* transform = scene.AddComponent<Transform>(*this);
+    Mesh* mesh           = scene.AddComponent<Mesh>(*this);
+    Texture texture      = AssetLoader::Load<Texture>("wall.jpg");
+    Texture awesome      = AssetLoader::Load<Texture>("awesomeface.png");
 
     std::vector<Vertex> vertices = {
         Vertex(0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f),
@@ -22,7 +23,6 @@ void Player::Setup(Scene& scene) {
     };
 
     std::vector<unsigned int> indices = {
-        // note that we start from 0!
         0,
         1,
         3,
@@ -35,4 +35,10 @@ void Player::Setup(Scene& scene) {
     mesh->SetShader(SHADER_tutorial_vert, SHADER_tutorial_frag);
     mesh->SetTexture(texture, 0);
     mesh->SetTexture(awesome, 1);
+
+    // transform->Translate(Vec3(0.3f, 0.2f, 0.1f));
+    // transform->Rotate(70.f, Vec3(0.f, 1.f, 0.f));
+
+    unsigned int transformLoc = glGetUniformLocation(mesh->shader.id, "transform");
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, transform->matrices.data);
 }

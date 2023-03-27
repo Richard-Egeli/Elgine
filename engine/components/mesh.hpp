@@ -8,12 +8,18 @@
 #include "../types/shader.hpp"
 #include "../types/texture.hpp"
 #include "../types/vertex.hpp"
+#include "elgine/types.hpp"
+#include "glm/detail/qualifier.hpp"
 
 struct Mesh {
     GLuint vbo;
     GLuint vao;
     GLuint ebo;
     Shader shader;
+
+    Mat4 model;
+    Mat4 view;
+    Mat4 projection;
 
     std::array<Texture, 8> textures;
 

@@ -1,13 +1,38 @@
 #include "mesh.hpp"
 
+#include <OpenGL/OpenGL.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
 #include "../types/shader.hpp"
 #include "../types/vertex.hpp"
 #include "../utils/asset-loader.hpp"
+#include "glm/ext/matrix_clip_space.hpp"
+#include "math.hpp"
 #include "opengl.hpp"
 
-Mesh::Mesh() {}
+Mesh::Mesh() {
+    model      = Mat4(1.0f);
+    view       = Mat4(1.0f);
+    projection = Mat4(1.0f);
+
+    view.Translate({0.0f, 0.0f, -3.0f});
+    model.Rotate({Math::RadF(-55.0f), 1.0f, 0.0f, 0.0f});
+    projection.Perspective(Math::RadF(45.0f), 800.f / 600.f, 0.1f, 100.f);
+
+    int modelLoc      = glGetUniformLocation(shader.id, "model");
+    int viewLoc       = glGetUniformLocation(shader.id, "view");
+    int projectionLoc = glGetUniformLocation(shader.id, "projection");
+
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.Value());
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.Value());
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, view.Value());
+
+    // projection.Perspective(Math::RadF(45.0f), 800.f / 600.f, 0.1f, 100.f);
+}
 
 Mesh::~Mesh() {}
 
@@ -53,6 +78,14 @@ void Mesh::UpdateShaderTextures() {
             std::string name = "texture" + std::to_string(i);
             shader.Set<int>(name.c_str(), i);
         }
+
+        int modelLoc      = glGetUniformLocation(shader.id, "model");
+        int viewLoc       = glGetUniformLocation(shader.id, "view");
+        int projectionLoc = glGetUniformLocation(shader.id, "projection");
+
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.Value());
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.Value());
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, view.Value());
     }
 }
 

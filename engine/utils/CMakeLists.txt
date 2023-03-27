@@ -1,8 +1,9 @@
 
 target_sources(ElgineEngine PRIVATE 
-    ${CMAKE_CURRENT_SOURCE_DIR}/debug.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/time.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/asset-loader.cpp
+    debug.cpp
+    time.cpp
+    asset-loader.cpp
+    math.cpp
 )
 
-target_include_directories(ElgineEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(ElgineEngine PRIVATE .)
