@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "elgine/components.hpp"
+#include "elgine/opengl.hpp"
 #include "elgine/types.hpp"
 #include "elgine/utils.hpp"
 #include "shaders.hpp"

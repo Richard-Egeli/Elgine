@@ -1,0 +1,11 @@
+
+
+target_sources(ElgineEngine PRIVATE elgine.cpp)
+
+target_include_directories(ElgineEngine PRIVATE .)
+
+add_subdirectory(utils)
+add_subdirectory(components)
+add_subdirectory(entities)
+add_subdirectory(types)
+add_subdirectory(systems)

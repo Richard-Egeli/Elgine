@@ -28,7 +28,6 @@ target_link_libraries(Elgine PUBLIC
 
     ${OPENGL_LIBRARIES} 
     ${SDL2_LIBRARIES}
-    INTERFACE
     ElgineEngine
 )
 

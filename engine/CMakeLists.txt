@@ -13,22 +13,15 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET 13.1)
 
 add_library(ElgineEngine STATIC)
 
-target_sources(ElgineEngine PRIVATE elgine.cpp)
 
-add_subdirectory(utils)
-add_subdirectory(ecs)
-add_subdirectory(components)
-add_subdirectory(entities)
-add_subdirectory(types)
-add_subdirectory(systems)
 add_subdirectory(lib)
-
+add_subdirectory(src)
+add_subdirectory(include/elgine)
 
 target_include_directories(ElgineEngine 
-    PRIVATE
-    .
     PUBLIC
-    include
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
 )
 
 

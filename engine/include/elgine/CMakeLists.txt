@@ -1,0 +1,7 @@
+target_include_directories(ElgineEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_subdirectory(ecs)
+add_subdirectory(utils)
+add_subdirectory(types)
+add_subdirectory(systems)
+add_subdirectory(components)
