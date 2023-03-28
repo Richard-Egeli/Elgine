@@ -1,24 +1,16 @@
 #include "input-manager.hpp"
 
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keycode.h>
 
 #include <array>
 #include <iostream>
 
 #include "elgine.hpp"
+#include "input-event.hpp"
+#include "input-key.hpp"
 
-static std::array<InputEvent, 256> Inputs;
-
-void InputManager::EnableDefaultBindings() {
-    //
-    InputManager::Bind(InputEvent::Quit, SDLK_ESCAPE);
-}
-
-void InputManager::Bind(InputEvent event, InputKey key) {
-    if (EventInvalid(event) || KeyInvalid(key)) return;
-
-    Inputs[key] = event;
-}
+static std::array<InputEvent, InputKey::Last> InputKeyBinds = {InputKey::Invalid};
 
 void InputManager::HandleMouseMotionEvents(SDL_MouseMotionEvent event) {}
 
@@ -26,26 +18,26 @@ void InputManager::HandleMouseButtonEvents(SDL_MouseButtonEvent event) {}
 
 void InputManager::HandleMouseWheelEvents(SDL_MouseWheelEvent event) {}
 
-void InputManager::HandleKeyboardEvents(SDL_KeyboardEvent event) {
-    if (KeyInvalid(event.keysym.sym) || EventInvalid(Inputs[event.keysym.sym])) return;
+void InputManager::HandleKeyboardEvents(SDL_KeyboardEvent event, bool isPressed) {
+    InputKey key = KeyValid(event.keysym.sym);
 
-    EventResponseHandler(Inputs[event.keysym.sym]);
-}
-
-bool InputManager::KeyInvalid(InputKey key) { return (key < 0 || key > 255); }
-
-bool InputManager::EventInvalid(InputEvent event) {
-    return (event == InputEvent::Invalid || event == InputEvent::Last);
-}
-
-void InputManager::EventResponseHandler(InputEvent event) {
-    switch (event) {
-        case InputEvent::Quit:
-            Elgine::Stop();
-            break;
-        default:
-            break;
+    if (key != InputKey::Invalid) {
+        InputKeyBinds[key].SetPressed(isPressed);
     }
+}
+
+InputKey InputManager::KeyValid(int key) {
+    return (key > 0 && key < InputKey::Last) ? (InputKey)key : InputKey::Invalid;
+}
+
+bool InputManager::GetKeyDown(InputKey key) { return InputKeyBinds[key].JustPressed(); }
+
+bool InputManager::GetKeyUp(InputKey key) { return InputKeyBinds[key].JustReleased(); }
+
+float InputManager::GetAxis(InputKey key) { return InputKeyBinds[key].axis; }
+
+void InputManager::UpdateAxisValues() {
+    for (auto& k : InputKeyBinds) k.BlendValue();
 }
 
 void InputManager::PollEvents() {
@@ -66,8 +58,10 @@ void InputManager::PollEvents() {
                 HandleMouseButtonEvents(event.button);
                 break;
             case SDL_KEYUP:
+                HandleKeyboardEvents(event.key, false);
+                break;
             case SDL_KEYDOWN:
-                HandleKeyboardEvents(event.key);
+                HandleKeyboardEvents(event.key, true);
                 break;
         }
     }

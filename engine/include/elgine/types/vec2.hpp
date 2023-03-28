@@ -16,4 +16,6 @@ struct Vec2 {
         float n = 1.0f / Math::SqrtF(x * x + y * y);
         return Vec2(x * n, y * n);
     }
+
+    void Print() const { std::cout << "x: " << x << ", y: " << y << std::endl; }
 };

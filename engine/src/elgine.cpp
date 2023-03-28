@@ -10,6 +10,7 @@
 #include "debug.hpp"
 #include "elgine/input/input-manager.hpp"
 #include "elgine/systems/mesh-rendering.hpp"
+#include "input-event.hpp"
 #include "time.hpp"
 
 std::vector<Scene> Elgine::Scenes;
@@ -54,7 +55,6 @@ Elgine::Elgine() {
     }
 
     Debug::Log("SDL2 Initialized!");
-    InputManager::EnableDefaultBindings();
     SDL_GL_SetSwapInterval(1);
     glEnable(GL_DEPTH_TEST);
 }
@@ -69,9 +69,6 @@ void Elgine::GameLoop() {
     double accumulator = 0.0;
 
     while (isRunning) {
-        // Dev Inputs
-        // Input();
-
         double newTime   = SDL_GetTicks64() / 1000.0;
         double frameTime = newTime - currentTime;
 
@@ -89,6 +86,7 @@ void Elgine::GameLoop() {
         }
 
         while (accumulator >= dt) {
+            InputManager::UpdateAxisValues();
             FixedFPSTick();
 
             for (Scene& scene : Scenes) {
