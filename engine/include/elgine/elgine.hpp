@@ -16,6 +16,7 @@ class Elgine {
     Elgine();
     ~Elgine();
     void Run();
+    static void Stop();
 
  public:
     static SDL_Window* Window;
@@ -23,10 +24,9 @@ class Elgine {
     static Scene& CreateScene(void);
 
  private:
-    bool isRunning;
+    static bool isRunning;
 
  private:
     void Init();
     void GameLoop();
-    void Input();
 };

@@ -1,5 +1,5 @@
 #include "elgine.hpp"
-//
+
 #include <OpenGL/OpenGL.h>
 #include <SDL.h>
 #include <SDL2/SDL_opengl.h>
@@ -8,31 +8,17 @@
 #include <string>
 
 #include "debug.hpp"
+#include "elgine/input/input-manager.hpp"
 #include "elgine/systems/mesh-rendering.hpp"
 #include "time.hpp"
 
 std::vector<Scene> Elgine::Scenes;
+bool Elgine::isRunning;
 
 SDL_Window* Elgine::Window;
 static SDL_GLContext Context;
 
-void Elgine::Input() {
-    SDL_Event event;
-
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-            case SDL_QUIT:
-                isRunning = false;
-                break;
-            case SDL_KEYDOWN:
-                if (event.key.keysym.sym == SDLK_ESCAPE) {
-                    isRunning = false;
-                }
-
-                break;
-        }
-    }
-}
+void Elgine::Stop() { isRunning = false; }
 
 Elgine::Elgine() {
     isRunning = true;
@@ -68,7 +54,7 @@ Elgine::Elgine() {
     }
 
     Debug::Log("SDL2 Initialized!");
-
+    InputManager::EnableDefaultBindings();
     SDL_GL_SetSwapInterval(1);
     glEnable(GL_DEPTH_TEST);
 }
@@ -84,7 +70,7 @@ void Elgine::GameLoop() {
 
     while (isRunning) {
         // Dev Inputs
-        Input();
+        // Input();
 
         double newTime   = SDL_GetTicks64() / 1000.0;
         double frameTime = newTime - currentTime;
@@ -131,6 +117,7 @@ void Elgine::GameLoop() {
         }
 
         SDL_GL_SwapWindow(Window);
+        InputManager::PollEvents();
     }
 }
 

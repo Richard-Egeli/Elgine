@@ -35,7 +35,7 @@ void MeshRendering(Scene& scene) {
         static float dir;
         dir += horMove;
 
-        transform->position.Print();
+        // transform->position.Print();
         transform->Translate({horMove, 0.0f, 0.0f});
 
         // push the updated matrix data to the shader

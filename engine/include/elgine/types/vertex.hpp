@@ -1,13 +1,13 @@
 #pragma once
 
 #include "color.hpp"
+#include "vec2.hpp"
 #include "vec3.hpp"
-#include "vector2.hpp"
 
 struct Vertex {
-    Vec3<float> position;
+    Vec3 position;
     Color color;
-    Vector2 uv;
+    Vec2 uv;
 
     Vertex(float x   = 0.0f,
            float y   = 0.0f,

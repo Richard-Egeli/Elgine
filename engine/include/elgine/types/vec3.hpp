@@ -4,17 +4,16 @@
 
 #include "elgine/utils.hpp"
 
-template <typename T>
 struct Vec3 {
-    T x;
-    T y;
-    T z;
+    float x;
+    float y;
+    float z;
 
     Vec3() {}
 
-    Vec3(T x, T y, T z) : x(x), y(y), z(z) {}
+    Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
 
-    void SetPosition(T x, T y, T z) {
+    void SetPosition(float x, float y, float z) {
         this->x = x;
         this->y = y;
         this->z = z;
@@ -24,13 +23,13 @@ struct Vec3 {
         std::cout << "x: " << this->x << ", y: " << this->y << ", z: " << this->z << std::endl;
     }
 
-    Vec3<T> Normalize() {
+    Vec3 Normalize() {
         const float n = 1.0f / Math::SqrtF(x * x + y * y + z * z);
-        return Vec3<T>(x * n, y * n, z * n);
+        return Vec3(x * n, y * n, z * n);
     }
 
-    Vec3<T> operator*(const Vec3& v1) {
-        Vec3<T> result;
+    Vec3 operator*(const Vec3& v1) {
+        Vec3 result;
 
         result.x = this->x * v1.x;
         result.y = this->y * v1.y;
@@ -39,8 +38,8 @@ struct Vec3 {
         return result;
     }
 
-    Vec3<T> operator/(const Vec3& v1) {
-        Vec3<T> result;
+    Vec3 operator/(const Vec3& v1) {
+        Vec3 result;
 
         result.x = this->x / v1.x;
         result.y = this->y / v1.y;
@@ -49,8 +48,8 @@ struct Vec3 {
         return result;
     }
 
-    Vec3<T> operator+(const Vec3& v1) {
-        Vec3<T> result;
+    Vec3 operator+(const Vec3& v1) {
+        Vec3 result;
 
         result.x = this->x + v1.x;
         result.y = this->y + v1.y;
@@ -59,8 +58,8 @@ struct Vec3 {
         return result;
     }
 
-    Vec3<T> operator-(const Vec3& v1) {
-        Vec3<T> result;
+    Vec3 operator-(const Vec3& v1) {
+        Vec3 result;
 
         result.x = this->x - v1.x;
         result.y = this->y - v1.y;
