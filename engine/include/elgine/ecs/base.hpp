@@ -2,10 +2,9 @@
 
 #include <bitset>
 
-const int MAX_COMPONENTS = 64;
-using EntityId           = unsigned int;
-using EntityIndex        = unsigned int;
-using ComponentMask      = std::bitset<MAX_COMPONENTS>;
+const unsigned char MAX_COMPONENTS = 32;
+using EntityId                     = unsigned int;
+using ComponentMask                = std::bitset<MAX_COMPONENTS>;
 
 struct Base {
     EntityId id;

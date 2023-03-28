@@ -19,7 +19,7 @@ struct SceneView {
     }
 
     struct Iterator {
-        Iterator(Scene* scene, EntityIndex index, ComponentMask mask, bool all)
+        Iterator(Scene* scene, unsigned int index, ComponentMask mask, bool all)
             : scene(scene), index(index), componentMask(mask), all(all) {}
 
         Base& operator*() const { return scene->entities[index]; }
@@ -49,7 +49,7 @@ struct SceneView {
             return *this;
         }
 
-        EntityIndex index;
+        unsigned int index;
         ComponentMask componentMask;
         bool all{false};
         Scene* scene;
