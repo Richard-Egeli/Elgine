@@ -1,9 +1,5 @@
 #include "player.hpp"
 
-#include <../lib/glm/glm.hpp>
-#include <../lib/glm/gtc/matrix_transform.hpp>
-#include <iostream>
-
 #include "elgine/components.hpp"
 #include "elgine/opengl.hpp"
 #include "elgine/types.hpp"
@@ -26,14 +22,7 @@ void Player::Setup(Scene& scene) {
         Vertex(-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f),
     };
 
-    std::vector<unsigned int> indices = {
-        0,
-        1,
-        3,
-        1,
-        2,
-        3,
-    };
+    std::vector<Triangle> indices = {Triangle(0, 1, 3), Triangle(1, 2, 3)};
 
     mesh->SetMesh(vertices, indices);
     mesh->SetShader(SHADER_tutorial_vert, SHADER_tutorial_frag);

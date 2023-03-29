@@ -5,6 +5,7 @@
 #include "math.hpp"
 #include "opengl.hpp"
 #include "shader.hpp"
+#include "triangle.hpp"
 #include "vertex.hpp"
 
 Mesh::Mesh() {}
@@ -17,7 +18,7 @@ void Mesh::Draw() const {
     glBindVertexArray(0);
 }
 
-void Mesh::SetMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) {
+void Mesh::SetMesh(std::vector<Vertex> vertices, std::vector<Triangle> indices) {
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
     glDeleteVertexArrays(1, &vao);
@@ -33,7 +34,7 @@ void Mesh::SetMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indic
     glBufferData(GL_ARRAY_BUFFER, vertex_buffer_size, &vertices[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    size_t index_buffer_size = indices.size() * sizeof(unsigned int);
+    size_t index_buffer_size = indices.size() * sizeof(Triangle);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_size, &indices[0], GL_STATIC_DRAW);
 
     // position

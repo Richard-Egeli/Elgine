@@ -9,9 +9,9 @@
 #include "transform.hpp"
 
 void CameraMovementSystem(Scene& scene) {
-    for (auto& e : SceneView<CameraMovement, Transform>(scene)) {
-        CameraMovement* cam = scene.GetComponent<CameraMovement>(e);
-        Transform* trans    = scene.GetComponent<Transform>(e);
+    for (auto& entity : SceneView<CameraMovement, Transform>(scene)) {
+        CameraMovement* cam = scene.GetComponent<CameraMovement>(entity);
+        Transform* trans    = scene.GetComponent<Transform>(entity);
 
         const float radius = 10.f;
         const float camX   = Math::Sin(Time::time) * radius;

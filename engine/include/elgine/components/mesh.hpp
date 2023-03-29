@@ -16,7 +16,7 @@ struct Mesh {
     Mesh();
     ~Mesh();
 
-    void SetMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+    void SetMesh(std::vector<Vertex> vertices, std::vector<Triangle> indices);
 
     void SetShader(const char* vertexShader, const char* fragmentShader);
     void ClearShader();
