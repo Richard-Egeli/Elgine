@@ -31,7 +31,7 @@ void Shader::Clear() {
     this->id       = 0;
 }
 
-void Shader::SetVertex(VertexShader source) {
+void Shader::SetVertexShader(VertexShader source) {
     glDeleteShader(this->vertex);
 
     this->vertex = glCreateShader(GL_VERTEX_SHADER);
@@ -41,7 +41,7 @@ void Shader::SetVertex(VertexShader source) {
     Link();
 }
 
-void Shader::SetFragment(FragmentShader source) {
+void Shader::SetFragmentShader(FragmentShader source) {
     glDeleteShader(this->fragment);
 
     this->fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -50,6 +50,15 @@ void Shader::SetFragment(FragmentShader source) {
 
     Link();
 }
+
+void Shader::SetMat4(const char* key, Mat4 value) const {
+    unsigned int location = glGetUniformLocation(this->id, key);
+    glUniformMatrix4fv(location, 1, GL_FALSE, value.Value());
+}
+
+// void Shader::SetTransform(const char* key, const Transform value) const {
+//     SetMat4(key, value.matrices);
+// }
 
 void Shader::SetInt(const char* key, int value) const {
     glUniform1i(glGetUniformLocation(this->id, key), value);

@@ -16,5 +16,5 @@ struct Entity : public Base {
         return entity;
     }
 
-    virtual void Setup(Scene& scene) = 0;
+    virtual void Setup(Scene& scene){};
 };

@@ -2,11 +2,11 @@
 
 #include <cmath>
 
-static const float PI = 3.14159;
+static const double PI = 3.14159;
 
-float Math::CosF(float angle) { return std::cosf(angle); }
+double Math::Cos(double angle) { return std::cos(angle); }
 
-float Math::SinF(float angle) { return std::cosf(angle); }
+double Math::Sin(double angle) { return std::sin(angle); }
 
 float Math::SqrtF(float value) { return std::sqrtf(value); }
 

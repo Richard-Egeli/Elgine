@@ -2,15 +2,17 @@
 
 #include <OpenGL/OpenGL.h>
 #include <SDL.h>
+#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_opengl.h>
 
 #include <iostream>
 #include <string>
 
+#include "camera.hpp"
 #include "debug.hpp"
-#include "elgine/input/input-manager.hpp"
 #include "elgine/systems/mesh-rendering.hpp"
 #include "input-event.hpp"
+#include "input.hpp"
 #include "time.hpp"
 
 std::vector<Scene> Elgine::Scenes;
@@ -23,7 +25,6 @@ void Elgine::Stop() { isRunning = false; }
 
 Elgine::Elgine() {
     isRunning = true;
-
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
@@ -55,8 +56,12 @@ Elgine::Elgine() {
     }
 
     Debug::Log("SDL2 Initialized!");
+    // SDL_SetRelativeMouseMode(SDL_TRUE);
     SDL_GL_SetSwapInterval(1);
     glEnable(GL_DEPTH_TEST);
+
+    Input::Init();
+    Camera::Init();
 }
 
 Elgine::~Elgine() {}
@@ -86,7 +91,7 @@ void Elgine::GameLoop() {
         }
 
         while (accumulator >= dt) {
-            InputManager::UpdateAxisValues();
+            Input::FixedAxisBlend();
             FixedFPSTick();
 
             for (Scene& scene : Scenes) {
@@ -115,7 +120,7 @@ void Elgine::GameLoop() {
         }
 
         SDL_GL_SwapWindow(Window);
-        InputManager::PollEvents();
+        Input::PollEvents();
     }
 }
 

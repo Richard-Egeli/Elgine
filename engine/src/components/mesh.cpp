@@ -1,38 +1,21 @@
 #include "mesh.hpp"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <iostream>
-
 #include "asset-loader.hpp"
-#include "glm/ext/matrix_clip_space.hpp"
+#include "camera.hpp"
 #include "math.hpp"
 #include "opengl.hpp"
 #include "shader.hpp"
 #include "vertex.hpp"
 
-Mesh::Mesh() {
-    model      = Mat4(1.0f);
-    view       = Mat4(1.0f);
-    projection = Mat4(1.0f);
-
-    view.Translate({0.0f, 0.0f, -3.0f});
-    model.Rotate({Math::RadF(-55.0f), 1.0f, 0.0f, 0.0f});
-    projection.Perspective(Math::RadF(45.0f), 800.f / 600.f, 0.1f, 100.f);
-
-    int modelLoc      = glGetUniformLocation(shader.id, "model");
-    int viewLoc       = glGetUniformLocation(shader.id, "view");
-    int projectionLoc = glGetUniformLocation(shader.id, "projection");
-
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.Value());
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.Value());
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, view.Value());
-
-    // projection.Perspective(Math::RadF(45.0f), 800.f / 600.f, 0.1f, 100.f);
-}
+Mesh::Mesh() {}
 
 Mesh::~Mesh() {}
+
+void Mesh::Draw() const {
+    glBindVertexArray(vao);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}
 
 void Mesh::SetMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) {
     glDeleteBuffers(1, &vbo);
@@ -74,22 +57,15 @@ void Mesh::UpdateShaderTextures() {
 
         for (int i = 0; i < textures.size(); i++) {
             std::string name = "texture" + std::to_string(i);
-            shader.Set<int>(name.c_str(), i);
+            shader.SetInt(name.c_str(), i);
         }
-
-        int modelLoc      = glGetUniformLocation(shader.id, "model");
-        int viewLoc       = glGetUniformLocation(shader.id, "view");
-        int projectionLoc = glGetUniformLocation(shader.id, "projection");
-
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.Value());
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.Value());
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, view.Value());
     }
 }
 
 void Mesh::SetShader(const char* vertexShader, const char* fragmentShader) {
-    shader.Set<VertexShader>(vertexShader);
-    shader.Set<FragmentShader>(fragmentShader);
+    shader.SetVertexShader(vertexShader);
+    shader.SetFragmentShader(fragmentShader);
+
     if (textures.size()) UpdateShaderTextures();
 }
 

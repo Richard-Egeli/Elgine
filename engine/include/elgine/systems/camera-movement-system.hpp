@@ -1,5 +1,5 @@
 #pragma once
 
-#include "scene.hpp"
+#include "elgine/ecs.hpp"
 
 extern void CameraMovementSystem(Scene& scene);

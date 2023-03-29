@@ -28,6 +28,13 @@ struct Vec3 {
         return Vec3(x * n, y * n, z * n);
     }
 
+    Vec3 Cross(Vec3 v1) { return {y * v1.z - z * v1.y, z * v1.x - x * v1.z, x * v1.y - y * v1.x}; }
+
+    static Vec3 Zero() { return {0.f, 0.f, 0.f}; }
+    static Vec3 Up() { return {0.f, 1.f, 0.f}; }
+    static Vec3 Right() { return {1.f, 0.f, 0.f}; }
+    static Vec3 Forward() { return {0.f, 0.f, 1.f}; }
+
     Vec3 operator*(const Vec3& v1) {
         Vec3 result;
 

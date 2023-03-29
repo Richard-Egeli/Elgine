@@ -1,9 +1,8 @@
 #pragma once
 
-struct CameraMovement {
-    float horizontal;
-    float vertical;
+#include "elgine/types.hpp"
 
-    float axisLeft;
-    float axisUp;
+struct CameraMovement {
+    Vec3 movement;
+    Vec3 axis;
 };

@@ -14,21 +14,23 @@
 
 struct Mat4 {
     glm::mat4 matrix;
-    float* data = glm::value_ptr(matrix);
+    // float* data = glm::value_ptr(matrix);
 
     Mat4(float initializer = 0.0f) {
         matrix = glm::mat4(initializer);
-        data   = glm::value_ptr(matrix);
+        // data   = glm::value_ptr(matrix);
     }
 
     Mat4(glm::mat4 mat) {
         matrix = mat;
-        data   = glm::value_ptr(matrix);
+        // data   = glm::value_ptr(matrix);
     }
 
     float* Value() { return glm::value_ptr(matrix); }
 
-    float& Set(unsigned int row, unsigned int col) { return data[row + (col * 4)]; }
+    float& Set(unsigned int row, unsigned int col) {
+        return glm::value_ptr(matrix)[row + (col * 4)];
+    }
 
     Vec3 Forward() const {
         const glm::mat4 inv     = glm::inverse(matrix);
@@ -46,6 +48,13 @@ struct Mat4 {
         const glm::mat4 inv = glm::inverse(matrix);
         const glm::vec3 up  = glm::normalize(glm::vec3(inv[1]));
         return Vec3(up.x, up.y, up.z);
+    }
+
+    void LookAt(Vec3 position, Vec3 direction, Vec3 up) {
+        glm::vec3 pos      = {position.x, position.y, position.z};
+        glm::vec3 dir      = {direction.x, direction.y, direction.z};
+        glm::vec3 upVector = {up.x, up.y, up.z};
+        matrix             = glm::lookAt(pos, dir, upVector);
     }
 
     Vec3 Translate(Vec3 pos) {

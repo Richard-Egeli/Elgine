@@ -11,10 +11,6 @@ struct Mesh {
     unsigned int ebo;
     Shader shader;
 
-    Mat4 model;
-    Mat4 view;
-    Mat4 projection;
-
     std::array<Texture, 8> textures;
 
     Mesh();
@@ -24,6 +20,8 @@ struct Mesh {
 
     void SetShader(const char* vertexShader, const char* fragmentShader);
     void ClearShader();
+
+    void Draw() const;
 
     void SetTexture(Texture texture, unsigned int slot = 0);
     void ClearTexture(unsigned int slot);

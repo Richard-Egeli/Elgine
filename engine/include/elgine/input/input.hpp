@@ -8,7 +8,7 @@ class SDL_MouseWheelEvent;
 class SDL_MouseMotionEvent;
 class SDL_MouseButtonEvent;
 
-class InputManager {
+class Input {
  public:
     friend class Elgine;
 
@@ -18,13 +18,14 @@ class InputManager {
     static float GetAxis(InputKey key);
 
  private:
+    static void Init();
     static void PollEvents();
-    static void UpdateAxisValues();
-    static InputKey KeyValid(int key);
+    static void FixedAxisBlend();
+    static InputKey KeyValid(unsigned int key);
 
     static void EventResponseHandler(InputKey event);
     static void HandleMouseWheelEvents(SDL_MouseWheelEvent event);
     static void HandleMouseMotionEvents(SDL_MouseMotionEvent event);
-    static void HandleMouseButtonEvents(SDL_MouseButtonEvent event);
+    static void HandleMouseButtonEvents(SDL_MouseButtonEvent event, bool isPressed);
     static void HandleKeyboardEvents(SDL_KeyboardEvent event, bool isPressed);
 };

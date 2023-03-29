@@ -1,1 +1,1 @@
-target_sources(ElgineEngine PRIVATE input-manager.cpp)
+target_sources(ElgineEngine PRIVATE input.cpp)

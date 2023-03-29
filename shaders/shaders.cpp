@@ -12,7 +12,7 @@ const char* SHADER_tutorial_vert = "#version 410 core\n"
 "uniform mat4 projection;\n"
 "void main()\n"
 "{\n"
-"gl_Position = projection * view * model * transform * vec4(aPos, 1.0);\n"
+"gl_Position = projection * view * model  * vec4(aPos, 1.0);\n"
 "ourColor = aColor;\n"
 "TexCoord = aTexCoord;\n"
 "}";
