@@ -18,8 +18,8 @@ void Input::Init() {
 }
 
 void Input::HandleMouseMotionEvents(SDL_MouseMotionEvent event) {
-    InputKeyBinds[InputKey::MouseX].axis = (float)event.xrel / 1000.f;
-    InputKeyBinds[InputKey::MouseY].axis = (float)event.yrel / 1000.f;
+    InputKeyBinds[InputKey::MouseX].axis = -(float)event.xrel / 1000.f;
+    InputKeyBinds[InputKey::MouseY].axis = -(float)event.yrel / 1000.f;
 }
 
 void Input::HandleMouseButtonEvents(SDL_MouseButtonEvent event, bool isPressed) {
@@ -47,6 +47,8 @@ void Input::HandleKeyboardEvents(SDL_KeyboardEvent event, bool isPressed) {
 InputKey Input::KeyValid(unsigned int key) {
     return (key < InputKey::Last) ? (InputKey)key : InputKey::Invalid;
 }
+
+bool Input::GetKey(InputKey key) { return InputKeyBinds[key].Pressed(); }
 
 bool Input::GetKeyDown(InputKey key) { return InputKeyBinds[key].JustPressed(); }
 

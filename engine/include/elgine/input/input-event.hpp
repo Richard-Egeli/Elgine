@@ -15,7 +15,7 @@ struct InputEvent {
     std::bitset<2> mask;
 
     float axis          = 0.0f;
-    float strength      = 0.02f;
+    float strength      = 0.04f;
     float interp        = 0.0f;
     InputEventType type = InputEventType::ClickAndAxis;
 

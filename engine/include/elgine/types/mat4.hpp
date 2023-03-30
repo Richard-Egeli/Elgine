@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "glm/ext/matrix_transform.hpp"
@@ -14,17 +15,8 @@
 
 struct Mat4 {
     glm::mat4 matrix;
-    // float* data = glm::value_ptr(matrix);
 
-    Mat4(float initializer = 0.0f) {
-        matrix = glm::mat4(initializer);
-        // data   = glm::value_ptr(matrix);
-    }
-
-    Mat4(glm::mat4 mat) {
-        matrix = mat;
-        // data   = glm::value_ptr(matrix);
-    }
+    Mat4(float initializer = 0.0f) { matrix = glm::mat4(initializer); }
 
     float* Value() { return glm::value_ptr(matrix); }
 
@@ -38,16 +30,11 @@ struct Mat4 {
         return Vec3(forward.x, forward.y, -forward.z);
     }
 
-    Vec3 Left() const {
-        const glm::mat4 inv  = glm::inverse(matrix);
-        const glm::vec3 left = glm::normalize(glm::vec3(inv[0]));
-        return Vec3(left.x, left.y, left.z);
-    }
-
     Vec3 Up() const {
         const glm::mat4 inv = glm::inverse(matrix);
         const glm::vec3 up  = glm::normalize(glm::vec3(inv[1]));
-        return Vec3(up.x, up.y, up.z);
+
+        return Vec3(up.x, up.y, -up.z);
     }
 
     void LookAt(Vec3 position, Vec3 direction, Vec3 up) {
@@ -58,6 +45,7 @@ struct Mat4 {
     }
 
     Vec3 Translate(Vec3 pos) {
+        pos.Print();
         matrix           = glm::translate(matrix, glm::vec3(pos.x, pos.y, pos.z));
         glm::vec3 newPos = glm::vec3(matrix[3]);
 
@@ -80,7 +68,7 @@ struct Mat4 {
     }
 
     Quat Rotate(Quat rot) {
-        glm::vec3 axis = glm::normalize(glm::vec3(rot.x, rot.y, rot.z));
+        glm::vec3 axis = glm::normalize(glm::vec3(rot.x, rot.y, -rot.z));
         matrix         = glm::rotate(matrix, rot.w, axis);
 
         glm::quat quatRot;

@@ -5,9 +5,9 @@
 #include "elgine/utils.hpp"
 
 struct Vec3 {
-    float x;
-    float y;
-    float z;
+    float x = 0.0f;
+    float y = 0.0f;
+    float z = 0.0f;
 
     Vec3() {}
 
@@ -24,7 +24,8 @@ struct Vec3 {
     }
 
     Vec3 Normalize() {
-        const float n = 1.0f / Math::SqrtF(x * x + y * y + z * z);
+        float v = Math::Sqrt(x * x + y * y + z * z);
+        float n = (v != 0.f) ? 1.f / v : 0.f;
         return Vec3(x * n, y * n, z * n);
     }
 
@@ -41,6 +42,16 @@ struct Vec3 {
         result.x = this->x * v1.x;
         result.y = this->y * v1.y;
         result.z = this->z * v1.z;
+
+        return result;
+    }
+
+    Vec3 operator*(float v2) {
+        Vec3 result;
+
+        result.x = x * v2;
+        result.y = y * v2;
+        result.z = z * v2;
 
         return result;
     }

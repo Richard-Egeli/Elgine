@@ -4,7 +4,7 @@
 
 #include "default-shader.hpp"
 #include "mesh.hpp"
-#include "transform.hpp"
+#include "transform-component.hpp"
 
 void Plane::Setup(Scene& scene) {
     Transform* trans = scene.AddComponent<Transform>(*this);

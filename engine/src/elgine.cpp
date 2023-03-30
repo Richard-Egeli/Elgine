@@ -1,6 +1,5 @@
 #include "elgine.hpp"
 
-#include <OpenGL/OpenGL.h>
 #include <SDL.h>
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_opengl.h>
@@ -56,7 +55,7 @@ Elgine::Elgine() {
     }
 
     Debug::Log("SDL2 Initialized!");
-    // SDL_SetRelativeMouseMode(SDL_TRUE);
+    SDL_SetRelativeMouseMode(SDL_TRUE);
     SDL_GL_SetSwapInterval(1);
     glEnable(GL_DEPTH_TEST);
 

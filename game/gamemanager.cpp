@@ -1,8 +1,6 @@
 #include "gamemanager.hpp"
 
-#include "elgine/components/camera-movement.hpp"
-#include "elgine/components/mesh.hpp"
-#include "elgine/components/transform.hpp"
+#include "elgine/components.hpp"
 #include "elgine/ecs/component.hpp"
 #include "elgine/elgine.hpp"
 #include "elgine/entities/plane.hpp"

@@ -8,7 +8,7 @@ double Math::Cos(double angle) { return std::cos(angle); }
 
 double Math::Sin(double angle) { return std::sin(angle); }
 
-float Math::SqrtF(float value) { return std::sqrtf(value); }
+double Math::Sqrt(double value) { return std::sqrt(value); }
 
 float Math::RadF(float angle) { return angle * PI / 180; }
 

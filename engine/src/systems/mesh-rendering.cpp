@@ -4,7 +4,7 @@
 #include "mesh.hpp"
 #include "opengl.hpp"
 #include "quat.hpp"
-#include "transform.hpp"
+#include "transform-component.hpp"
 
 void MeshRendering(Scene& scene) {
     for (auto& entity : SceneView<Mesh, Transform>(scene)) {

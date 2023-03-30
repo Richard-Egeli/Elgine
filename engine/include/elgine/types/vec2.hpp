@@ -13,7 +13,7 @@ struct Vec2 {
     }
 
     Vec2 Normalize() {
-        float n = 1.0f / Math::SqrtF(x * x + y * y);
+        float n = 1.0f / Math::Sqrt(x * x + y * y);
         return Vec2(x * n, y * n);
     }
 

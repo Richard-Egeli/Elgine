@@ -3,7 +3,7 @@
 #include "camera-movement-system.hpp"
 #include "camera-movement.hpp"
 #include "scene.hpp"
-#include "transform.hpp"
+#include "transform-component.hpp"
 
 void EditorCamera::Setup(Scene& scene) {
     Transform* transform        = scene.AddComponent<Transform>(*this);

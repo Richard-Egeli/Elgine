@@ -5,7 +5,7 @@
 #include "math.hpp"
 
 Quat Quat::Normalize() {
-    const float n = 1.f / Math::SqrtF(x * x + y * y + z * z + w * w);
+    const float n = 1 / Math::Sqrt(x * x + y * y + z * z + w * w);
     return Quat(w * n, x * n, y * n, z * n);
 }
 
