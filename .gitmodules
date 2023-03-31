@@ -1,3 +1,4 @@
-[submodule "engine/lib/assimp"]
-	path = engine/lib/assimp
-	url = git@github.com:assimp/assimp.git
+[submodule "engine/lib/assimp-master"]
+path = engine/lib/assimp
+url = git@github.com:assimp/assimp.git
+branch = v5.2.5
