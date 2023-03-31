@@ -29,4 +29,5 @@ target_link_libraries(
     ElgineEngine
     ${OPENGL_LIBRARIES} 
     ${SDL2_LIBRARIES}
+    # ${ASSIMP_LIBRARIES}
 )

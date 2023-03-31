@@ -16,7 +16,7 @@
 struct Mat4 {
     glm::mat4 matrix;
 
-    Mat4(float initializer = 0.0f) { matrix = glm::mat4(initializer); }
+    Mat4(float initializer = 1.0f) { matrix = glm::mat4(initializer); }
 
     float* Value() { return glm::value_ptr(matrix); }
 
