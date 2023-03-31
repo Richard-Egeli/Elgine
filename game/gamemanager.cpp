@@ -11,7 +11,7 @@
 void GameManager::Init() {
     Scene& scene  = Elgine::CreateScene();
     Player player = Entity::Create<Player>(scene);
-    Plane plane   = Entity::Create<Plane>(scene);
+    // Plane plane   = Entity::Create<Plane>(scene);
 
     Entity ent = Entity::Create<Entity>(scene);
     scene.AddComponent<CameraMovement>(ent);

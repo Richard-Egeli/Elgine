@@ -6,6 +6,8 @@
 
 #include "elgine/types/texture.hpp"
 
+struct Mesh;
+
 class AssetLoader {
  private:
     const static char* ASSET_PATH;
@@ -16,6 +18,8 @@ class AssetLoader {
     static void UnloadTexture(const Texture texture);
 
  public:
+    static void LoadMesh(const char* path, Mesh* outMesh);
+
     template <typename T>
     static T Load(const char* path) {
         if (std::is_same<T, Texture>::value) {

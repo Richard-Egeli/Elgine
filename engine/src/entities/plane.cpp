@@ -17,7 +17,7 @@ void Plane::Setup(Scene& scene) {
         Vertex(-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f),
     };
 
-    std::vector<Triangle> indices = {Triangle(0, 1, 3), Triangle(1, 2, 3)};
+    std::vector<unsigned int> indices = {0, 1, 3, 1, 2, 3};
     mesh->SetMesh(vertices, indices);
 
     const char* vertex = DefaultShader::VertexShader;

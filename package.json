@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "sh ./bin/start.sh",
     "build": "sh ./bin/build.sh",
-    "compile:embedder": "g++ -std=c++17 tools/embed/main.cpp -o build/embedder.a"
+    "setup": "sh ./bin/setup.sh"
   },
   "keywords": [],
   "author": "",

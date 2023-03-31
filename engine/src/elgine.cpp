@@ -58,6 +58,7 @@ Elgine::Elgine() {
     SDL_SetRelativeMouseMode(SDL_TRUE);
     SDL_GL_SetSwapInterval(1);
     glEnable(GL_DEPTH_TEST);
+    // glPolygonMode(, GL_FILL);
 
     Input::Init();
     Camera::Init();

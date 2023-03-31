@@ -1,6 +1,5 @@
 #pragma once
 
-#include "vec3.hpp"
 struct Quat {
     float w;
     float x;

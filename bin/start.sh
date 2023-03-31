@@ -1,26 +1,14 @@
-mkdir build
+# mkdir build
 
-cd build
+# cd build
 
-./embedder.a ../shaders ../shaders
+sh ./bin/build.sh
 if [ $? -ne 0 ]; then
-    echo "Embedding shaders failed"
+    echo "Failed to build"
     exit 1
 fi
 
-cmake -G Ninja ..
-if [ $? -ne 0 ]; then
-    echo "CMake failed"
-    exit 1
-fi
-
-ninja
-if [ $? -ne 0 ]; then
-    echo "Ninja failed"
-    exit 1
-fi
-
-./Elgine
+./build/Elgine
 if [ $? -ne 0 ]; then
     echo "Elgine failed"
     exit 1

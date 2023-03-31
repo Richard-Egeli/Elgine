@@ -17,6 +17,8 @@ void Shader::Link() {
     if (this->fragment != 0) glAttachShader(this->id, this->fragment);
 
     glLinkProgram(this->id);
+
+    std::cout << "ERR " << glGetError() << std::endl;
 }
 
 void Shader::Use() const { glUseProgram(this->id); }

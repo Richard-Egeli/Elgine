@@ -9,14 +9,19 @@ struct Mesh {
     unsigned int vbo;
     unsigned int vao;
     unsigned int ebo;
+    unsigned int size;
     Shader shader;
 
     std::array<Texture, 8> textures;
 
     Mesh();
+    Mesh(std::vector<Vertex> vertices, std::vector<Triangle> indices);
+    // Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+
     ~Mesh();
 
-    void SetMesh(std::vector<Vertex> vertices, std::vector<Triangle> indices);
+    // void SetMesh(std::vector<Vertex> vertices, std::vector<Triangle> indices);
+    void SetMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 
     void SetShader(const char* vertexShader, const char* fragmentShader);
     void ClearShader();

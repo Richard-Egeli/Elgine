@@ -1,24 +1,88 @@
 #include "asset-loader.hpp"
 
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+
+#include <assimp/Importer.hpp>
 #include <fstream>
 #include <ios>
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
+#include "assimp/include/assimp/postprocess.h"
 #include "elgine.hpp"
 #include "opengl.hpp"
 #include "stb_image.hpp"
+#include "vertex.hpp"
 
 std::vector<TextureData> AssetLoader::Textures;
 
-const char* AssetLoader::ASSET_PATH = "../assets/";
+const char* AssetLoader::ASSET_PATH = "assets/";
 
 Texture AssetLoader::HasTexture(const char* path) {
     for (auto& tex : Textures)
         if (tex.path == path) return tex.id;
 
     return 0;
+}
+
+void AssetLoader::LoadMesh(const char* path, Mesh* outMesh) {
+    std::string p;
+    p += ASSET_PATH;
+    p += path;
+
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(p.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs);
+
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+        std::cout << "ERROR:ASSIMP::" << importer.GetErrorString() << std::endl;
+        return;
+    }
+
+    // std::cout << scene->mNumMeshes << std::endl;
+
+    std::vector<aiMesh*> meshes;
+    aiMesh* mesh = scene->mMeshes[0];
+
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
+
+    // Extract vertex data
+    for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+        Vertex vx;
+
+        const aiVector3D& pos = mesh->mVertices[i];
+        vx.position           = {pos.x, pos.y, pos.z};
+
+        if (mesh->HasNormals()) {
+            const aiVector3D& normal = mesh->mNormals[i];
+            vx.normal                = {normal.x, normal.y, normal.z};
+        }
+
+        if (mesh->HasVertexColors(i)) {
+            const aiColor4D* color = mesh->mColors[i];
+            vx.color               = {color->r, color->g, color->b, color->a};
+        }
+
+        if (mesh->HasTextureCoords(0)) {
+            const aiVector3D& uv = mesh->mTextureCoords[0][i];
+            vx.uv                = {uv.x, uv.y};
+        }
+
+        vertices.push_back(vx);
+    }
+
+    // Extract index data
+    for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+        const aiFace& face = mesh->mFaces[i];
+        for (unsigned int j = 0; j < face.mNumIndices; j++) {
+            indices.push_back(face.mIndices[j]);
+        }
+    }
+
+    outMesh->SetMesh(vertices, indices);
 }
 
 Texture AssetLoader::LoadTexture(const char* path) {
