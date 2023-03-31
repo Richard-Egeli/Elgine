@@ -6,4 +6,5 @@ target_sources(ElgineEngine PRIVATE
     imgui_widgets.cpp
 )
 
+target_include_directories(ElgineEngine PRIVATE include/imgui)
 target_include_directories(ElgineEngine PUBLIC include)
