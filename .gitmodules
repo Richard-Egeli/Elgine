@@ -2,3 +2,6 @@
 path = engine/lib/assimp
 url = git@github.com:assimp/assimp.git
 branch=tag/v5.2.5
+[submodule "engine/lib/glm"]
+	path = engine/lib/glm
+	url = git@github.com:g-truc/glm.git

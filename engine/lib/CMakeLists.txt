@@ -4,5 +4,7 @@ add_subdirectory(imgui)
 add_subdirectory(glm)
 
 target_include_directories(ElgineEngine PUBLIC .
-    assimp-master/include
+    assimp/include
+    glm
+    
 )
