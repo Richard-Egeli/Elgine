@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "assimp/include/assimp/postprocess.h"
+// #include "assimp/include/assimp/postprocess.h"
 #include "elgine.hpp"
 #include "opengl.hpp"
 #include "stb_image.hpp"

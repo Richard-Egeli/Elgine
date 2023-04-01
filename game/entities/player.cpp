@@ -6,7 +6,8 @@
 #include "elgine/types/mat4.hpp"
 #include "elgine/utils.hpp"
 #include "elgine/utils/asset-loader.hpp"
-#include "shaders.hpp"
+// #include "shaders.hpp"
+#include "shader-library.hpp"
 
 void Player::Setup(Scene& scene) {
     Transform* transform = scene.AddComponent<Transform>(*this);
