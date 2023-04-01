@@ -14,6 +14,10 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# There seems to sometimes be an issue where the shaders won't load if you run this too quickly.
+# So there's a 100ms delay here as a workaround for now
+sleep 0.5
+
 cd build
 
 cmake -G Ninja ..

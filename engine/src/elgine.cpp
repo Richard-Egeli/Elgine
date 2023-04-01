@@ -1,5 +1,6 @@
 #include "elgine.hpp"
 
+#include <OpenGL/OpenGL.h>
 #include <SDL.h>
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_opengl.h>
@@ -12,6 +13,7 @@
 #include "elgine/systems/mesh-rendering.hpp"
 #include "input-event.hpp"
 #include "input.hpp"
+#include "opengl.hpp"
 #include "time.hpp"
 
 std::vector<Scene> Elgine::Scenes;
@@ -108,7 +110,11 @@ void Elgine::GameLoop() {
         Time::time      = currentTime;
 
         // DRAW GRAPHICS
-        glClearColor(0.1, 0.1, 0.1, 1.0);
+        unsigned int fbo;
+        glGenFramebuffers(1, &fbo);
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+        glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         for (Scene& scene : Scenes) {
@@ -119,6 +125,7 @@ void Elgine::GameLoop() {
             }
         }
 
+        glDeleteFramebuffers(1, &fbo);
         SDL_GL_SwapWindow(Window);
         Input::PollEvents();
     }

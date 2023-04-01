@@ -1,4 +1,4 @@
-#include "shaders.hpp"
+#include "shader-library.hpp"
 
 const char* SHADER_default_vert = "\n"
 "#version 410 core\n"

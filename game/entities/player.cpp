@@ -1,12 +1,13 @@
 #include "player.hpp"
 
 #include "elgine/components.hpp"
+#include "elgine/default-shader.hpp"
 #include "elgine/opengl.hpp"
 #include "elgine/types.hpp"
 #include "elgine/types/mat4.hpp"
 #include "elgine/utils.hpp"
 #include "elgine/utils/asset-loader.hpp"
-#include "shaders.hpp"
+#include "shader-library.hpp"
 
 void Player::Setup(Scene& scene) {
     Transform* transform = scene.AddComponent<Transform>(*this);
@@ -27,9 +28,7 @@ void Player::Setup(Scene& scene) {
 
     // mesh->SetMesh(vertices, indices);
     AssetLoader::LoadMesh("test.fbx", mesh);
-
-    std::cout << "AFTER LOAD MESH " << glGetError() << std::endl;
-
+    std::cout << "AFTER SET SHADER " << glGetError() << std::endl;
     mesh->SetShader(SHADER_default_vert, SHADER_default_frag);
 
     std::cout << "AFTER SET SHADER " << glGetError() << std::endl;

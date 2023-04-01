@@ -1,8 +1,8 @@
 #include "elgine/components/mesh.hpp"
 #include "elgine/elgine.hpp"
+#include "elgine/opengl.hpp"
 #include "elgine/utils/asset-loader.hpp"
 #include "game/gamemanager.hpp"
-#include "shaders.hpp"
 
 int main(int argc, char **argv) {
     Elgine *elgine = new Elgine();
@@ -10,7 +10,6 @@ int main(int argc, char **argv) {
     GameManager::Init();
 
     // AssetLoader::LoadMesh("test.gltf");
-
     elgine->Run();
 
     delete elgine;

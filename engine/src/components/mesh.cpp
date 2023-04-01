@@ -78,7 +78,7 @@ void Mesh::SetShader(const char* vertexShader, const char* fragmentShader) {
     shader.SetVertexShader(vertexShader);
     shader.SetFragmentShader(fragmentShader);
 
-    if (textures.size()) UpdateShaderTextures();
+    // if (textures.size()) UpdateShaderTextures();
 }
 
 void Mesh::ClearShader() { shader.Clear(); }

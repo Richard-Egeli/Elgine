@@ -23,6 +23,8 @@ struct Shader {
     void Use() const;
     void Clear();
 
+    static void CheckCompileError(unsigned int id);
+    static void CheckLinkError(unsigned int id);
     void SetVertexShader(VertexShader source);
     void SetFragmentShader(FragmentShader source);
 
