@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_video.h>
 
 #include <iostream>
 #include <string>
@@ -28,9 +29,12 @@ Elgine::Elgine() {
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
 
     Window = SDL_CreateWindow("Elgine",
                               SDL_WINDOWPOS_CENTERED,
@@ -57,7 +61,9 @@ Elgine::Elgine() {
     Debug::Log("SDL2 Initialized!");
     SDL_SetRelativeMouseMode(SDL_TRUE);
     SDL_GL_SetSwapInterval(1);
+
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_MULTISAMPLE);
     // glPolygonMode(, GL_FILL);
 
     Input::Init();
