@@ -1,5 +1,6 @@
 #pragma once
 
+#include "btBulletDynamicsCommon.h"
 #include "elgine/types.hpp"
 
 extern Vec3 operator*(const float& f, const Vec3& v);
@@ -9,6 +10,7 @@ struct TransformComponent {
     Quat rotation;
     Vec3 scale;
     Mat4 matrices = Mat4(1.0f);
+    btTransform btTransform;
 
     void Translate(Vec3 position);
     void SetPosition(Vec3 position);

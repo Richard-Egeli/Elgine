@@ -11,6 +11,8 @@
 class SDL_Window;
 struct Scene;
 
+class btDiscreteDynamicsWorld;
+
 class Elgine {
  public:
     Elgine();
@@ -22,6 +24,8 @@ class Elgine {
     static SDL_Window* Window;
     static std::vector<Scene> Scenes;
     static Scene& CreateScene(void);
+
+    static btDiscreteDynamicsWorld* World;
 
  private:
     static bool isRunning;

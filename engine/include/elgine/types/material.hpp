@@ -5,10 +5,11 @@
 
 class Material : public Shader {
  public:
-    Vec3 diffuse;
+    unsigned int diffuse;
     Vec3 specular;
     Vec3 ambient;
 
     Material();
+
     virtual void Use() override;
 };

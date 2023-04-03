@@ -53,12 +53,12 @@ void MeshComponent::SetMesh(std::vector<Vertex> vertices, std::vector<unsigned i
     glEnableVertexAttribArray(1);
 
     // vertex color
-    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
+    // glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(6 * sizeof(float)));
+    // glEnableVertexAttribArray(2);
 
     // texture coords
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(10 * sizeof(float)));
-    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
 }

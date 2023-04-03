@@ -7,8 +7,8 @@
 struct Vertex {
     Vec3 position;
     Vec3 normal;
-    Color color;
     Vec2 uv;
+    Color color;
 
     Vertex(float x   = 0.0f,
            float y   = 0.0f,

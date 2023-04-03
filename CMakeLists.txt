@@ -5,8 +5,13 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
+find_package(Bullet REQUIRED)
 
-include_directories(${OPENGL_INCLUDE_DIR} ${SDL2_INCLUDE_DIR})
+include_directories(
+    ${OPENGL_INCLUDE_DIR} 
+    ${SDL2_INCLUDE_DIR} 
+    ${BULLET_INCLUDE_DIR}
+)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 13.1)
@@ -26,6 +31,7 @@ add_executable(Elgine main.cpp)
 target_link_libraries(Elgine PUBLIC
     ElgineGame
 
+    ${BULLET_LIBRARIES}
     ${OPENGL_LIBRARIES} 
     ${SDL2_LIBRARIES}
     ElgineEngine

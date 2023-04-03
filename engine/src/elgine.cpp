@@ -8,12 +8,16 @@
 #include <iostream>
 #include <string>
 
+#include "btBulletCollisionCommon.h"
+#include "btBulletDynamicsCommon.h"
 #include "camera.hpp"
 #include "debug.hpp"
 #include "elgine/systems/mesh-rendering.hpp"
 #include "input-event.hpp"
 #include "input.hpp"
 #include "time.hpp"
+
+btDiscreteDynamicsWorld* Elgine::World = nullptr;
 
 std::vector<Scene> Elgine::Scenes;
 bool Elgine::isRunning;
@@ -67,6 +71,15 @@ Elgine::Elgine() {
 
     Input::Init();
     Camera::Init();
+
+    // btDefaultCollisionConfiguration* collisionConfiguration = new
+    // btDefaultCollisionConfiguration(); btCollisionDispatcher* dispatcher           = new
+    // btCollisionDispatcher(collisionConfiguration); btBroadphaseInterface* broadphase           =
+    // new btDbvtBroadphase(); btSequentialImpulseConstraintSolver* solver = new
+    // btSequentialImpulseConstraintSolver();
+
+    // Elgine::World =
+    //     new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 }
 
 Elgine::~Elgine() {}
@@ -98,6 +111,8 @@ void Elgine::GameLoop() {
         while (accumulator >= dt) {
             Input::FixedAxisBlend();
             FixedFPSTick();
+
+            // Elgine::World->stepSimulation(1 / 60.0, 10);
 
             for (Scene& scene : Scenes) {
                 if (scene.disabled) continue;

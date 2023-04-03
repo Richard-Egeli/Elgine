@@ -7,8 +7,6 @@ int main(int argc, char **argv) {
 
     GameManager::Init();
 
-    // AssetLoader::LoadMesh("test.gltf");
-
     elgine->Run();
 
     delete elgine;

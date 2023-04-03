@@ -13,21 +13,11 @@ void MeshRendering(Scene& scene) {
         if (mesh == nullptr || !mesh->material.id) continue;
 
         mesh->material.Use();
-        // for (int i = 0; i < mesh->textures.size(); i++) {
-        //     if (mesh->textures[i].texture != 0) {
-        //         glActiveTexture(GL_TEXTURE0 + i);
-        //         glBindTexture(GL_TEXTURE_2D, mesh->textures[i].texture);
-        //     }
-        // }
 
         Vec3 direction = (Globals::SunPosition - transform->position);
-
-        // mesh->material.SetVec3("material.diffuse", {0.9f, 0.9f, 0.9f});
-        // mesh->material.SetVec3("material.specular", {0.5f, 0.5f, 0.5f});
-        // mesh->material.SetVec3("material.ambient", {0.3f, 0.3f, 0.3f});
-        // mesh->material.SetFloat("material.shininess", 64.0f);
-
         mesh->material.SetVec3("dirLight.direction", {-direction.x, -direction.y, -direction.z});
+        mesh->material.SetVec3("sunPos", Globals::SunPosition);
+
         mesh->material.SetVec3("dirLight.diffuse", {0.9f, 0.9f, 0.9f});
         mesh->material.SetVec3("dirLight.ambient", {0.9f, 0.9f, 0.9f});
         mesh->material.SetVec3("dirLight.specular", {1.f, 1.f, 1.f});
@@ -35,10 +25,6 @@ void MeshRendering(Scene& scene) {
         mesh->material.SetMat4("view", Camera::GetView());
         mesh->material.SetMat4("model", transform->matrices);
         mesh->material.SetMat4("projection", Camera::Projection);
-        mesh->material.SetVec3("viewPos", transform->position);
         mesh->Draw();
-        std::cout << glGetError() << std::endl;
-
-        glGetError();
     }
 }
