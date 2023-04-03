@@ -6,8 +6,14 @@ set(CMAKE_CXX_STANDARD 17)
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(Assimp REQUIRED)
+find_package(Box2d REQUIRED)
 
-include_directories(${OPENGL_INCLUDE_DIR} ${SDL2_INCLUDE_DIR})
+include_directories(
+    ${OPENGL_INCLUDE_DIR} 
+    ${SDL2_INCLUDE_DIR}
+    ${ASSIMP_INCLUDE_DIR}
+    ${BOX2D_INCLUDE_DIR}     
+)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 13.1)
@@ -30,4 +36,5 @@ target_link_libraries(
     ${OPENGL_LIBRARIES} 
     ${SDL2_LIBRARIES}
     ${ASSIMP_LIBRARIES}
+    ${BOX2D_LIBRARIES}
 )
