@@ -6,7 +6,7 @@
 
 #include "elgine/types/texture.hpp"
 
-struct Mesh;
+struct MeshComponent;
 
 class AssetLoader {
  private:
@@ -18,7 +18,7 @@ class AssetLoader {
     static void UnloadTexture(const Texture texture);
 
  public:
-    static void LoadMesh(const char* path, Mesh* outMesh);
+    static void LoadMesh(const char* path, MeshComponent* outMesh);
 
     template <typename T>
     static T Load(const char* path) {

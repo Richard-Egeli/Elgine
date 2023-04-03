@@ -15,7 +15,7 @@ set(CMAKE_CXX_FLAGS "")
 
 add_library(ElgineGame STATIC)
 
-add_subdirectory(shaders)
+# add_subdirectory(shaders)
 add_subdirectory(engine)
 add_subdirectory(game)
 

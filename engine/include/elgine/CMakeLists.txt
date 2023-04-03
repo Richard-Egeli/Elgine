@@ -1,4 +1,5 @@
 target_include_directories(ElgineEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_sources(ElgineEngine PRIVATE shader-library.cpp)
 
 add_subdirectory(ecs)
 add_subdirectory(utils)

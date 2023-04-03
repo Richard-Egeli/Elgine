@@ -3,6 +3,7 @@
 #include "types/color.hpp"
 #include "types/color32.hpp"
 #include "types/mat4.hpp"
+#include "types/material.hpp"
 #include "types/quat.hpp"
 #include "types/shader.hpp"
 #include "types/texture.hpp"

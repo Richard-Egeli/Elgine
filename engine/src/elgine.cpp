@@ -64,7 +64,6 @@ Elgine::Elgine() {
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
-    // glPolygonMode(, GL_FILL);
 
     Input::Init();
     Camera::Init();

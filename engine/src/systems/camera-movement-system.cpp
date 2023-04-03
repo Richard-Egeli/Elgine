@@ -11,9 +11,9 @@
 #include "transform-component.hpp"
 
 void CameraMovementSystem(Scene& scene) {
-    for (auto& entity : SceneView<CameraMovement, Transform>(scene)) {
-        CameraMovement* cam = scene.GetComponent<CameraMovement>(entity);
-        Transform* trans    = scene.GetComponent<Transform>(entity);
+    for (auto& entity : SceneView<CameraMovement, TransformComponent>(scene)) {
+        CameraMovement* cam       = scene.GetComponent<CameraMovement>(entity);
+        TransformComponent* trans = scene.GetComponent<TransformComponent>(entity);
 
         Vec3 input    = Vec3::Zero();
         Vec3 rotation = Vec3::Zero();

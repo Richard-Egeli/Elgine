@@ -4,7 +4,7 @@
 
 extern Vec3 operator*(const float& f, const Vec3& v);
 
-struct Transform {
+struct TransformComponent {
     Vec3 position;
     Quat rotation;
     Vec3 scale;

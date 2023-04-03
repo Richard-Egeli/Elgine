@@ -1,28 +1,44 @@
 #include "mesh-rendering.hpp"
 
 #include "camera.hpp"
-#include "mesh.hpp"
+#include "elgine/components.hpp"
+#include "elgine/globals.hpp"
 #include "opengl.hpp"
 #include "quat.hpp"
-#include "transform-component.hpp"
 
 void MeshRendering(Scene& scene) {
-    for (auto& entity : SceneView<Mesh, Transform>(scene)) {
-        Mesh* mesh           = scene.GetComponent<Mesh>(entity);
-        Transform* transform = scene.GetComponent<Transform>(entity);
-        if (mesh == nullptr || !mesh->shader.id) continue;
+    for (auto& entity : SceneView<MeshComponent, TransformComponent>(scene)) {
+        MeshComponent* mesh           = scene.GetComponent<MeshComponent>(entity);
+        TransformComponent* transform = scene.GetComponent<TransformComponent>(entity);
+        if (mesh == nullptr || !mesh->material.id) continue;
 
-        mesh->shader.Use();
-        for (int i = 0; i < mesh->textures.size(); i++) {
-            if (mesh->textures[i] != 0) {
-                glActiveTexture(GL_TEXTURE0 + i);
-                glBindTexture(GL_TEXTURE_2D, mesh->textures[i]);
-            }
-        }
+        mesh->material.Use();
+        // for (int i = 0; i < mesh->textures.size(); i++) {
+        //     if (mesh->textures[i].texture != 0) {
+        //         glActiveTexture(GL_TEXTURE0 + i);
+        //         glBindTexture(GL_TEXTURE_2D, mesh->textures[i].texture);
+        //     }
+        // }
 
-        mesh->shader.SetMat4("view", Camera::GetView());
-        mesh->shader.SetMat4("model", transform->matrices);
-        mesh->shader.SetMat4("projection", Camera::Projection);
+        Vec3 direction = (Globals::SunPosition - transform->position);
+
+        // mesh->material.SetVec3("material.diffuse", {0.9f, 0.9f, 0.9f});
+        // mesh->material.SetVec3("material.specular", {0.5f, 0.5f, 0.5f});
+        // mesh->material.SetVec3("material.ambient", {0.3f, 0.3f, 0.3f});
+        // mesh->material.SetFloat("material.shininess", 64.0f);
+
+        mesh->material.SetVec3("dirLight.direction", {-direction.x, -direction.y, -direction.z});
+        mesh->material.SetVec3("dirLight.diffuse", {0.9f, 0.9f, 0.9f});
+        mesh->material.SetVec3("dirLight.ambient", {0.9f, 0.9f, 0.9f});
+        mesh->material.SetVec3("dirLight.specular", {1.f, 1.f, 1.f});
+
+        mesh->material.SetMat4("view", Camera::GetView());
+        mesh->material.SetMat4("model", transform->matrices);
+        mesh->material.SetMat4("projection", Camera::Projection);
+        mesh->material.SetVec3("viewPos", transform->position);
         mesh->Draw();
+        std::cout << glGetError() << std::endl;
+
+        glGetError();
     }
 }

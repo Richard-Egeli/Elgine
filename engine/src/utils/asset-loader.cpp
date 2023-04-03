@@ -28,7 +28,7 @@ Texture AssetLoader::HasTexture(const char* path) {
     return 0;
 }
 
-void AssetLoader::LoadMesh(const char* path, Mesh* outMesh) {
+void AssetLoader::LoadMesh(const char* path, MeshComponent* outMesh) {
     std::string p;
     p += ASSET_PATH;
     p += path;

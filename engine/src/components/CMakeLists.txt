@@ -1,5 +1,5 @@
 target_sources(ElgineEngine PRIVATE 
-    mesh.cpp
+    mesh-component.cpp
     transform-component.cpp
 )
 

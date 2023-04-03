@@ -8,18 +8,20 @@ Vec3 operator*(const float& f, const Vec3& v) {
     return res;
 }
 
-void Transform::Translate(Vec3 position) {
+void TransformComponent::Translate(Vec3 position) {
     this->position = matrices.SetPosition(this->position + position);
 }
 
-void Transform::SetPosition(Vec3 position) { this->position = matrices.SetPosition(position); }
+void TransformComponent::SetPosition(Vec3 position) {
+    this->position = matrices.SetPosition(position);
+}
 
-void Transform::Rotate(float angle, Vec3 axis) {
+void TransformComponent::Rotate(float angle, Vec3 axis) {
     this->rotation = matrices.Rotate(Quat(angle, axis.x, axis.y, axis.z));
 }
 
-void Transform::Scale(Vec3 scale) { matrices.Scale(scale); }
+void TransformComponent::Scale(Vec3 scale) { matrices.Scale(scale); }
 
-Vec3 Transform::Forward() const { return matrices.Forward(); }
-Vec3 Transform::Right() const { return Forward().Cross(Vec3::Up()); }
-Vec3 Transform::Up() const { return Vec3::Up(); }
+Vec3 TransformComponent::Forward() const { return matrices.Forward(); }
+Vec3 TransformComponent::Right() const { return Forward().Cross(Vec3::Up()); }
+Vec3 TransformComponent::Up() const { return Vec3::Up(); }

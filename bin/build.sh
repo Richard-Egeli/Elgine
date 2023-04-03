@@ -1,6 +1,6 @@
 mkdir build
 
-if [ ! -e ./build/embedder.a ]; then 
+if [ ! -e ./build/embedder.a ]; then
     g++ -std=c++17 tools/embed/main.cpp -o build/embedder.a
     if [ $? -ne 0 ]; then
         echo "Failed to compile shader embedding tool"
@@ -8,7 +8,7 @@ if [ ! -e ./build/embedder.a ]; then
     fi
 fi
 
-./build/embedder.a ./shaders ./shaders
+./build/embedder.a ./shaders ./engine/include/elgine
 if [ $? -ne 0 ]; then
     echo "Embedding shaders failed"
     exit 1
@@ -27,4 +27,3 @@ if [ $? -ne 0 ]; then
     echo "Ninja failed"
     exit 1
 fi
-

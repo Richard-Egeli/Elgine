@@ -1,10 +1,9 @@
 #include "shader.hpp"
 
-#include <OpenGL/OpenGL.h>
-
 #include <iostream>
 
-#include "../opengl.hpp"
+#include "elgine/opengl.hpp"
+#include "elgine/types.hpp"
 
 Shader::Shader() {}
 
@@ -59,7 +58,7 @@ void Shader::Link() {
     glGetError();
 }
 
-void Shader::Use() const { glUseProgram(this->id); }
+void Shader::Use() { glUseProgram(this->id); }
 
 void Shader::Clear() {
     glDeleteShader(this->vertex);
@@ -71,7 +70,7 @@ void Shader::Clear() {
     this->id       = 0;
 }
 
-void Shader::SetVertexShader(VertexShader source) {
+void Shader::SetVertexShader(const char* source) {
     if (this->vertex != 0) glDeleteShader(this->vertex);
 
     this->vertex = glCreateShader(GL_VERTEX_SHADER);
@@ -82,7 +81,7 @@ void Shader::SetVertexShader(VertexShader source) {
     Link();
 }
 
-void Shader::SetFragmentShader(FragmentShader source) {
+void Shader::SetFragmentShader(const char* source) {
     if (this->fragment != 0) glDeleteShader(this->fragment);
 
     this->fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -98,9 +97,10 @@ void Shader::SetMat4(const char* key, Mat4 value) const {
     glUniformMatrix4fv(location, 1, GL_FALSE, value.Value());
 }
 
-// void Shader::SetTransform(const char* key, const Transform value) const {
-//     SetMat4(key, value.matrices);
-// }
+void Shader::SetVec3(const char* key, const Vec3& value) const {
+    unsigned int location = glGetUniformLocation(this->id, key);
+    glUniform3f(location, value.x, value.y, value.z);
+}
 
 void Shader::SetInt(const char* key, int value) const {
     glUniform1i(glGetUniformLocation(this->id, key), value);

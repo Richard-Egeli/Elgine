@@ -125,7 +125,7 @@ string create_header_template(vector<FileContent>& file) {
 string create_source_template(vector<FileContent>& files) {
     ostringstream source;
 
-    source << "#include \"shaders.hpp\"\n\n";
+    source << "#include \"shader-library.hpp\"\n\n";
 
     for (auto& file : files) {
         source << "const char* " << prefix << convert_filename(file.filename) << " = ";
@@ -201,8 +201,8 @@ int main(int argc, char* argv[]) {
     string new_header = create_header_template(files);
     string new_source = create_source_template(files);
 
-    string source_path = output_dir + "/shaders.cpp";
-    string header_path = output_dir + "/shaders.hpp";
+    string source_path = output_dir + "/shader-library.cpp";
+    string header_path = output_dir + "/shader-library.hpp";
 
     // check if the file has updated before overwriting it
     try_save_shader(source_path, new_source);

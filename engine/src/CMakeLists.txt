@@ -1,6 +1,10 @@
 
 
-target_sources(ElgineEngine PRIVATE elgine.cpp default-shader.cpp)
+target_sources(ElgineEngine PRIVATE 
+    elgine.cpp 
+    default-shader.cpp
+    globals.cpp    
+)
 
 target_include_directories(ElgineEngine PRIVATE .)
 

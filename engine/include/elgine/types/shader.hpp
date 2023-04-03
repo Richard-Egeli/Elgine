@@ -3,12 +3,11 @@
 #include <string>
 #include <type_traits>
 
-#include "elgine/types.hpp"
+struct Vec3;
+struct Mat4;
 
-using FragmentShader = const char*;
-using VertexShader   = const char*;
-
-struct Shader {
+class Shader {
+ public:
     unsigned int vertex;
     unsigned int fragment;
     unsigned int id;
@@ -20,16 +19,17 @@ struct Shader {
     Shader();
     ~Shader();
 
-    void Use() const;
+    virtual void Use();
     void Clear();
 
     static void CheckCompileError(unsigned int id);
     static int CheckLinkError(unsigned int id);
 
-    void SetVertexShader(VertexShader source);
-    void SetFragmentShader(FragmentShader source);
+    void SetVertexShader(const char* source);
+    void SetFragmentShader(const char* source);
 
     void SetInt(const char* key, int value) const;
     void SetFloat(const char* key, float value) const;
+    void SetVec3(const char* key, const Vec3& value) const;
     void SetMat4(const char* key, Mat4 value) const;
 };

@@ -49,7 +49,7 @@ struct Scene {
         entity.destroyed              = true;
     }
 
-    void AddSystem(System func, SystemType type) {
+    Scene& AddSystem(System func, SystemType type) {
         std::vector<SystemDesc>* data;
 
         switch (type) {
@@ -70,7 +70,7 @@ struct Scene {
         for (int i = 0; i < data->size(); i++) {
             if (data->at(i).func == func) {
                 data->at(i).dependents++;
-                return;
+                return *this;
             }
         }
 
@@ -78,6 +78,7 @@ struct Scene {
         d.func       = func;
         d.dependents = 1;
         data->push_back(d);
+        return *this;
     }
 
     template <typename T>
